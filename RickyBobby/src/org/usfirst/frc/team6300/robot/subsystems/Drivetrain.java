@@ -17,11 +17,19 @@ public class Drivetrain extends Subsystem {
 	static SpeedController rfMotor = new VictorSP(RobotMap.rfMotor);
 	static SpeedController lbMotor = new VictorSP(RobotMap.lbMotor);
 	static SpeedController rbMotor = new VictorSP(RobotMap.rbMotor);
+	
 	//motor speeds:
 	double lfSpeed = 0;
 	double rfSpeed = 0;
 	double lbSpeed = 0;
 	double rbSpeed = 0;
+	
+	public Drivetrain() {
+		lfMotor.setInverted(RobotMap.lfInverted);
+		rfMotor.setInverted(RobotMap.rfInverted);
+		lbMotor.setInverted(RobotMap.lbInverted);
+		rbMotor.setInverted(RobotMap.rbInverted);
+	}
 	
 	/**
 	 * Drives the robot with a joystick.

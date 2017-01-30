@@ -15,8 +15,13 @@ public class RobotMap {
 	public static int throttleAxis = 3;
 	
 	//drivetrain
-	public static int lfMotor = 0;
-	public static int rfMotor = 1;
+	public static int lfMotor = 1;
+	public static int rfMotor = 0;
 	public static int lbMotor = 2;
 	public static int rbMotor = 3;
+	
+	public static boolean lfInverted = true;
+	public static boolean rfInverted = false;
+	public static boolean lbInverted = true;
+	public static boolean rbInverted = false;
 }
