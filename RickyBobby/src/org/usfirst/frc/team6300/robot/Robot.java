@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
-import org.usfirst.frc.team6300.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team6300.robot.commands.*;
+import org.usfirst.frc.team6300.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +23,7 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	
 	public static Drivetrain drivetrain;
+	public static Shooter shooter;
 	
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();

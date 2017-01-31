@@ -14,14 +14,20 @@ public class RobotMap {
 	public static int rotateAxis = 4;
 	public static int throttleAxis = 3;
 	
+	public static int gamepadSh = 1;
+	public static int spinUp = 1;
+	
 	//drivetrain
-	public static int lfMotor = 3; //
-	public static int rfMotor = 2; //
-	public static int lbMotor = 1; //good!
-	public static int rbMotor = 0; //good
+	public static int lfMotor = 3;
+	public static int rfMotor = 2;
+	public static int lbMotor = 1;
+	public static int rbMotor = 0;
 	
 	public static boolean lfInverted = false;
 	public static boolean rfInverted = true;
 	public static boolean lbInverted = false;
 	public static boolean rbInverted = true;
+	
+	//shooter
+	public static int flyMotor = 4;
 }
