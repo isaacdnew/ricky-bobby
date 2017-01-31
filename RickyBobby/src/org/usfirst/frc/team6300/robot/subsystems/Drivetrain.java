@@ -66,10 +66,10 @@ public class Drivetrain extends Subsystem {
 		rbSpeed -= slideSpeed * power;
 		
 		//rotate
-		lfSpeed += rotateSpeed * power;
-		rfSpeed -= rotateSpeed * power;
-		lbSpeed += rotateSpeed * power;
-		rbSpeed -= rotateSpeed * power;
+		lfSpeed -= rotateSpeed * power;
+		rfSpeed += rotateSpeed * power;
+		lbSpeed -= rotateSpeed * power;
+		rbSpeed += rotateSpeed * power;
 		
 		updateMotors();
 	}
@@ -81,7 +81,7 @@ public class Drivetrain extends Subsystem {
 		rbMotor.set(rbSpeed);
 	}
 	
-	public void stop() {
+	public void brake() {
 		lfMotor.stopMotor();
 		rfMotor.stopMotor();
 		lbMotor.stopMotor();

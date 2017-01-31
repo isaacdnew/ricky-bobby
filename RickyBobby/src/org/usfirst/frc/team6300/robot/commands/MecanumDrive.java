@@ -41,6 +41,6 @@ public class MecanumDrive extends Command {
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
-		Robot.drivetrain.stop();
+		Robot.drivetrain.brake();
 	}
 }
