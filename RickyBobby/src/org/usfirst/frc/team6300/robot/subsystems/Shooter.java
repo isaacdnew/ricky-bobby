@@ -10,18 +10,20 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Shooter extends Subsystem {
-	private SpeedController flyMotor;
+	static SpeedController flyMotor = new VictorSP(RobotMap.flyMotor);
 	
 	public Shooter() {
-		flyMotor = new VictorSP(RobotMap.flyMotor);
+		flyMotor.setInverted(RobotMap.flyInverted);
 	}
 	
 	public void spinUp(double speed) {
 		flyMotor.set(speed);
+		System.out.println("Spinning up!");
 	}
 	
 	public void stop() {
 		flyMotor.stopMotor();
+		System.out.println("Stopping!");
 	}
 	
 	public void initDefaultCommand() {

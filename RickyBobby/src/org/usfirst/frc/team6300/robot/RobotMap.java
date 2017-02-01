@@ -30,4 +30,5 @@ public class RobotMap {
 	
 	//shooter
 	public static int flyMotor = 4;
+	public static boolean flyInverted = false;
 }

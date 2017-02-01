@@ -1,5 +1,7 @@
 package org.usfirst.frc.team6300.robot;
 
+import org.usfirst.frc.team6300.robot.commands.TeleFlywheel;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -10,7 +12,13 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI {
 	public static Joystick gamepadDr = new Joystick(RobotMap.gamepadDr);
-	public static Button spinUp = new JoystickButton(gamepadDr, RobotMap.spinUp);
+	
+	public static Joystick gamepadSh = new Joystick(RobotMap.gamepadSh);
+	public static Button spinUp = new JoystickButton(gamepadSh, RobotMap.spinUp);
+	
+	public OI() {
+		spinUp.toggleWhenPressed(new TeleFlywheel());
+	}
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
