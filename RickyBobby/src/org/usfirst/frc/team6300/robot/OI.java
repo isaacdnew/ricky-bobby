@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6300.robot;
 
-import org.usfirst.frc.team6300.robot.commands.TeleFlywheel;
+import org.usfirst.frc.team6300.robot.commands.TeleShooter;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -17,7 +17,7 @@ public class OI {
 	public static Button spinUp = new JoystickButton(gamepadSh, RobotMap.spinUp);
 	
 	public OI() {
-		spinUp.toggleWhenPressed(new TeleFlywheel());
+		spinUp.toggleWhenPressed(new TeleShooter());
 	}
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a

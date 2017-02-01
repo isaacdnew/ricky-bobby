@@ -16,6 +16,8 @@ public class RobotMap {
 	
 	public static int gamepadSh = 1;
 	public static int spinUp = 1;
+	public static int pullAxis = 3;
+	public static int pushAxis = 2;
 	
 	//drivetrain
 	public static int lfMotor = 3;
@@ -31,4 +33,8 @@ public class RobotMap {
 	//shooter
 	public static int flyMotor = 4;
 	public static boolean flyInverted = false;
+	
+	//intake
+	public static int intakeMotor = 5;
+	public static boolean intakeInverted = true;
 }

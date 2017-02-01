@@ -24,6 +24,7 @@ public class Robot extends IterativeRobot {
 	
 	public static Drivetrain drivetrain = new Drivetrain();
 	public static Shooter shooter = new Shooter();
+	public static Intake intake = new Intake();
 	
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();

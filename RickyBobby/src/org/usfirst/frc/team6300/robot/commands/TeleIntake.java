@@ -1,26 +1,28 @@
 package org.usfirst.frc.team6300.robot.commands;
 
+import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.Robot;
+import org.usfirst.frc.team6300.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class TeleFlywheel extends Command {
+public class TeleIntake extends Command {
 
-    public TeleFlywheel() {
-        requires(Robot.shooter);
+    public TeleIntake() {
+        requires(Robot.intake);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	System.out.println("Telling the subsystem to spin up.");
-    	Robot.shooter.spinUp(1);
+    	System.out.println("Initializing the intake.");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.intake.setSpeed(OI.gamepadSh.getRawAxis(RobotMap.pullAxis) - OI.gamepadSh.getRawAxis(RobotMap.pushAxis));
     }
 
     // Make this return true when this Command no longer needs to run execute()
