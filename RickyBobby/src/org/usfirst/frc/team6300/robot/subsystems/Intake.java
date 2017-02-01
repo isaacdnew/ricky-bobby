@@ -19,7 +19,6 @@ public class Intake extends Subsystem {
 	
 	public void stop() {
 		intakeMotor.stopMotor();
-		System.out.println("Stopping!");
 	}
 	
 	public void initDefaultCommand() {

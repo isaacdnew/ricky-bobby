@@ -18,12 +18,12 @@ public class Shooter extends Subsystem {
 	
 	public void spinUp(double speed) {
 		flyMotor.set(speed);
-		System.out.println("Spinning up!");
+		System.out.println("Spinning up the shooter!");
 	}
 	
 	public void stop() {
 		flyMotor.stopMotor();
-		System.out.println("Stopping!");
+		System.out.println("Stopping the shooter.");
 	}
 	
 	public void initDefaultCommand() {

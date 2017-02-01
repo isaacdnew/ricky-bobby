@@ -15,7 +15,6 @@ public class TeleShooter extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	System.out.println("Telling the subsystem to spin up.");
     	Robot.shooter.spinUp(1);
     }
 
