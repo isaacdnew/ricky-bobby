@@ -15,7 +15,8 @@ public class RobotMap {
 	public static int throttleAxis = 3;
 	
 	public static int gamepadSh = 1;
-	public static int spinUp = 1;
+	public static int shooterButton = 1;
+	public static int agitatorButton = 2;
 	public static int pullAxis = 3;
 	public static int pushAxis = 2;
 	
@@ -37,4 +38,8 @@ public class RobotMap {
 	//intake
 	public static int intakeMotor = 5;
 	public static boolean intakeInverted = true;
+	
+	//agitator controller
+	public static int agitatorController = 6;
+	public static boolean agitatorInverted = false;
 }
