@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The pid-controlled drivetrain, consisting of four drive motors and a gyro sensor.
@@ -98,7 +99,11 @@ public class Drivetrain extends PIDSubsystem {
 		Timer.delay(0.5);
 		gyro.calibrate();
 	}
-
+	
+	public void printGyroValue() {
+		SmartDashboard.putNumber("Heading", gyro.getAngle());
+	}
+	
 	@Override
 	protected double returnPIDInput() {
 		return gyro.getAngle();
