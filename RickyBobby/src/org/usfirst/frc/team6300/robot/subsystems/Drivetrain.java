@@ -6,6 +6,7 @@ import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
@@ -85,18 +86,17 @@ public class Drivetrain extends PIDSubsystem {
 		rbMotor.set(rbSpeed);
 	}
 	
-	public void brake() {
-		lfMotor.stopMotor();
-		rfMotor.stopMotor();
-		lbMotor.stopMotor();
-		rbMotor.stopMotor();
-	}
-	
 	public void coast() {
 		lfMotor.set(0);
 		rfMotor.set(0);
 		lbMotor.set(0);
 		rbMotor.set(0);
+	}
+	
+	public void calibrateGyro() {
+		coast();
+		Timer.delay(0.5);
+		gyro.calibrate();
 	}
 
 	@Override

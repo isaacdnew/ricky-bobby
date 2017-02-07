@@ -36,7 +36,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		chooser.addDefault("Default Auto", new MecanumDrive());
+		chooser.addDefault("Mecanum Drive (doesn't work in auto mode)", new MecanumDrive());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 	}
@@ -53,7 +53,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
-		drivetrain.brake();
+		drivetrain.coast();
 	}
 	
 	/**
