@@ -3,15 +3,17 @@ package org.usfirst.frc.team6300.robot.subsystems;
 import org.usfirst.frc.team6300.robot.RobotMap;
 import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 /**
- * The drivetrain, consisting of four drive motors.
+ * The pid-controlled drivetrain, consisting of four drive motors and a gyro sensor.
  */
-public class Drivetrain extends Subsystem {
+public class Drivetrain extends PIDSubsystem {
 	//motors:
 	static SpeedController lfMotor = new VictorSP(RobotMap.lfMotor);
 	static SpeedController rfMotor = new VictorSP(RobotMap.rfMotor);
@@ -24,7 +26,11 @@ public class Drivetrain extends Subsystem {
 	double lbSpeed = 0;
 	double rbSpeed = 0;
 	
+	//gyro:
+	static Gyro gyro = new ADXRS450_Gyro();
+	
 	public Drivetrain() {
+		super(0.1, 0.0, 0.0);
 		lfMotor.setInverted(RobotMap.lfInverted);
 		rfMotor.setInverted(RobotMap.rfInverted);
 		lbMotor.setInverted(RobotMap.lbInverted);
@@ -66,12 +72,10 @@ public class Drivetrain extends Subsystem {
 		rbSpeed -= slideSpeed * power;
 		
 		//rotate
-		lfSpeed -= rotateSpeed * power;
-		rfSpeed += rotateSpeed * power;
-		lbSpeed -= rotateSpeed * power;
-		rbSpeed += rotateSpeed * power;
-		
+		setSetpoint(getSetpoint() + (rotateSpeed * power));
+		enable();
 		updateMotors();
+		disable();
 	}
 	
 	public void updateMotors() {
@@ -93,6 +97,19 @@ public class Drivetrain extends Subsystem {
 		rfMotor.set(0);
 		lbMotor.set(0);
 		rbMotor.set(0);
+	}
+
+	@Override
+	protected double returnPIDInput() {
+		return gyro.getAngle();
+	}
+
+	@Override
+	protected void usePIDOutput(double output) {
+		lfSpeed -= output;
+		rfSpeed += output;
+		lbSpeed -= output;
+		rbSpeed += output;
 	}
 	
 	public void initDefaultCommand() {
