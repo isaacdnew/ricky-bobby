@@ -32,7 +32,10 @@ public class Drivetrain extends PIDSubsystem {
 	static Gyro gyro = new ADXRS450_Gyro();
 	
 	public Drivetrain() {
-		super(0.1, 0.0, 0.0);
+		super("Drivetrain", 0.1, 0.0, 0.0);
+		getPIDController().setContinuous(true);
+		setInputRange(0, 360);
+		
 		lfMotor.setInverted(RobotMap.lfInverted);
 		rfMotor.setInverted(RobotMap.rfInverted);
 		lbMotor.setInverted(RobotMap.lbInverted);
@@ -77,6 +80,7 @@ public class Drivetrain extends PIDSubsystem {
 		setSetpoint(getSetpoint() + (rotateSpeed * power));
 		enable();
 		updateMotors();
+		Timer.delay(0.005);
 		disable();
 	}
 	
