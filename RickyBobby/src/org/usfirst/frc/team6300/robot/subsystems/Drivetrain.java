@@ -6,7 +6,6 @@ import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
@@ -61,7 +60,6 @@ public class Drivetrain extends PIDSubsystem {
 		double power = throttle + minThrottle;
 		if (power > 1) {power = 1;}
 		else if (power < -1) {power = -1;}
-		power /= 3;
 		
 		
 		//forward
@@ -77,11 +75,15 @@ public class Drivetrain extends PIDSubsystem {
 		rbSpeed -= slideSpeed * power;
 		
 		//rotate
-		setSetpoint(getSetpoint() + (rotateSpeed * power));
-		enable();
+		if (rotateSpeed != 0) {
+			lfSpeed += slideSpeed * power;
+			rfSpeed -= slideSpeed * power;
+			lbSpeed += slideSpeed * power;
+			rbSpeed -= slideSpeed * power;
+			updateMotors();
+			setSetpoint(gyro.getAngle());
+		}
 		updateMotors();
-		Timer.delay(0.005);
-		disable();
 	}
 	
 	public void updateMotors() {
@@ -100,11 +102,13 @@ public class Drivetrain extends PIDSubsystem {
 	
 	public void calibrateGyro() {
 		coast();
-		Timer.delay(0.5);
 		gyro.calibrate();
 	}
 	
-	public void printGyroValue() {
+	/**
+	 * Puts the current heading to the SmartDashboard.
+	 */
+	public void putGyroValue() {
 		SmartDashboard.putNumber("Heading", gyro.getAngle());
 	}
 	

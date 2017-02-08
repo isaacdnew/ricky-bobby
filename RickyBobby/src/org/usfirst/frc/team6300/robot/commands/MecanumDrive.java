@@ -19,13 +19,14 @@ public class MecanumDrive extends Command {
 	@Override
 	protected void initialize() {
 		Robot.drivetrain.calibrateGyro();
+		Robot.drivetrain.enable();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.drivetrain.teleDrive(OI.gamepadDr, RobotMap.forwardAxis, RobotMap.slideAxis, RobotMap.rotateAxis, RobotMap.throttleAxis, 1);
-		Robot.drivetrain.printGyroValue();
+		Robot.drivetrain.teleDrive(OI.gamepadDr, RobotMap.forwardAxis, RobotMap.slideAxis, RobotMap.rotateAxis, RobotMap.throttleAxis, 1/3);
+		Robot.drivetrain.putGyroValue();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

@@ -21,12 +21,12 @@ public class Intake extends Subsystem {
 		intakeMotor.stopMotor();
 	}
 	
-	public void initDefaultCommand() {
-		setDefaultCommand(new TeleIntake());
-	}
-
 	public void setSpeed(double speed) {
 		intakeMotor.set(speed);
+	}
+	
+	public void initDefaultCommand() {
+		setDefaultCommand(new TeleIntake());
 	}
 }
 
