@@ -1,7 +1,8 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
+import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.RobotMap;
-import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
+import org.usfirst.frc.team6300.robot.commands.TeleDrive;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
@@ -30,10 +31,13 @@ public class Drivetrain extends PIDSubsystem {
 	//gyro:
 	static Gyro gyro = new ADXRS450_Gyro();
 	
+	String driveMode = "";
+	
 	public Drivetrain() {
-		super("Drivetrain", 0.1, 0.0, 0.0);
+		super("Drivetrain", 0.05, 0.0, 0.0);
 		getPIDController().setContinuous(true);
 		setInputRange(0, 360);
+		setSetpoint(0);
 		
 		lfMotor.setInverted(RobotMap.lfInverted);
 		rfMotor.setInverted(RobotMap.rfInverted);
@@ -60,13 +64,13 @@ public class Drivetrain extends PIDSubsystem {
 		double power = throttle + minThrottle;
 		if (power > 1) {power = 1;}
 		else if (power < -1) {power = -1;}
-		
+		//power /= 3;
 		
 		//forward
-		lfSpeed = forwardSpeed * power;
-		rfSpeed = forwardSpeed * power;
-		lbSpeed = forwardSpeed * power;
-		rbSpeed = forwardSpeed * power;
+		lfSpeed += forwardSpeed * power;
+		rfSpeed += forwardSpeed * power;
+		lbSpeed += forwardSpeed * power;
+		rbSpeed += forwardSpeed * power;
 		
 		//slide
 		lfSpeed -= slideSpeed * power;
@@ -75,15 +79,29 @@ public class Drivetrain extends PIDSubsystem {
 		rbSpeed -= slideSpeed * power;
 		
 		//rotate
-		if (rotateSpeed != 0) {
-			lfSpeed += slideSpeed * power;
-			rfSpeed -= slideSpeed * power;
-			lbSpeed += slideSpeed * power;
-			rbSpeed -= slideSpeed * power;
-			updateMotors();
-			setSetpoint(gyro.getAngle());
+		if (rotateSpeed > -0.01 || 0.01 > rotateSpeed) {
+			setSetpoint(getSetpoint() + rotateSpeed * 5);
 		}
+		SmartDashboard.putNumber("Setpoint:", getSetpoint());
 		updateMotors();
+	}
+	
+	@Override
+	protected void usePIDOutput(double output) {
+		lfSpeed = -output;
+		rfSpeed = output;
+		lbSpeed = -output;
+		rbSpeed = output;
+		switch (driveMode) {
+		case "TeleOp": {
+			teleDrive(OI.gamepadDr, RobotMap.forwardAxis, RobotMap.slideAxis, RobotMap.rotateAxis, RobotMap.throttleAxis, 1);
+			break;
+		}
+		
+		case "Autonomous": {
+			break;
+		}
+		}
 	}
 	
 	public void updateMotors() {
@@ -91,6 +109,10 @@ public class Drivetrain extends PIDSubsystem {
 		rfMotor.set(rfSpeed);
 		lbMotor.set(lbSpeed);
 		rbMotor.set(rbSpeed);
+	}
+	
+	public void setDriveMode(String newDriveMode) {
+		driveMode = newDriveMode;
 	}
 	
 	public void coast() {
@@ -102,7 +124,9 @@ public class Drivetrain extends PIDSubsystem {
 	
 	public void calibrateGyro() {
 		coast();
+		System.out.println("Calibrating the gyro...");
 		gyro.calibrate();
+		System.out.println("Done!");
 	}
 	
 	/**
@@ -116,16 +140,8 @@ public class Drivetrain extends PIDSubsystem {
 	protected double returnPIDInput() {
 		return gyro.getAngle();
 	}
-
-	@Override
-	protected void usePIDOutput(double output) {
-		lfSpeed -= output;
-		rfSpeed += output;
-		lbSpeed -= output;
-		rbSpeed += output;
-	}
 	
 	public void initDefaultCommand() {
-		setDefaultCommand(new MecanumDrive());
+		setDefaultCommand(new TeleDrive());
 	}
 }
