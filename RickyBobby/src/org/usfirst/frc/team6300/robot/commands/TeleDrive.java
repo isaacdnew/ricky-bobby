@@ -9,8 +9,8 @@ import org.usfirst.frc.team6300.robot.RobotMap;
 /**
  *
  */
-public class MecanumDrive extends Command {
-	public MecanumDrive() {
+public class TeleDrive extends Command {
+	public TeleDrive() {
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.drivetrain);
 	}

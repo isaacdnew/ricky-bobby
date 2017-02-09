@@ -1,7 +1,7 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.RobotMap;
-import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
+import org.usfirst.frc.team6300.robot.commands.TeleDrive;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -110,6 +110,6 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public void initDefaultCommand() {
-		setDefaultCommand(new MecanumDrive());
+		setDefaultCommand(new TeleDrive());
 	}
 }
