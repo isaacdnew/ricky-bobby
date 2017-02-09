@@ -23,7 +23,6 @@ public class Shooter extends Subsystem {
 	
 	public void stop() {
 		flyMotor.stopMotor();
-		System.out.println("Stopping the shooter.");
 	}
 	
 	public void initDefaultCommand() {

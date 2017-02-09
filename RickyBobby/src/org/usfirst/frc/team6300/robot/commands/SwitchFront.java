@@ -2,15 +2,14 @@ package org.usfirst.frc.team6300.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.Robot;
-import org.usfirst.frc.team6300.robot.RobotMap;
+
 
 /**
  *
  */
-public class MecanumDrive extends Command {
-	public MecanumDrive() {
+public class SwitchFront extends Command {
+	public SwitchFront() {
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.drivetrain);
 	}
@@ -18,30 +17,28 @@ public class MecanumDrive extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		System.out.println("The gear end is the front.");
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.drivetrain.teleDrive(OI.gamepadDr, RobotMap.forwardAxis, RobotMap.slideAxis, RobotMap.rotateAxis, RobotMap.throttleAxis, 0.5);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
+		Robot.drivetrain.switchFront();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
-		Robot.drivetrain.brake();
 	}
 }

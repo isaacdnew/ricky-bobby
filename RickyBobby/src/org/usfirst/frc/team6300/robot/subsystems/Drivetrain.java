@@ -23,6 +23,7 @@ public class Drivetrain extends Subsystem {
 	double rfSpeed = 0;
 	double lbSpeed = 0;
 	double rbSpeed = 0;
+	boolean gearIsFront = true;
 	
 	public Drivetrain() {
 		lfMotor.setInverted(RobotMap.lfInverted);
@@ -47,11 +48,13 @@ public class Drivetrain extends Subsystem {
 		double throttle = joy.getRawAxis(throttleAxis);
 		
 		//set power coefficient
-		double power = throttle + minThrottle;
+		double power = minThrottle;
+		power += throttle / 2;
 		if (power > 1) {power = 1;}
 		else if (power < -1) {power = -1;}
-		power /= 3;
-		
+		if (!gearIsFront) {
+			power = -power;
+		}
 		
 		//forward
 		lfSpeed = forwardSpeed * power;
@@ -66,12 +69,23 @@ public class Drivetrain extends Subsystem {
 		rbSpeed -= slideSpeed * power;
 		
 		//rotate
-		lfSpeed -= rotateSpeed * power;
-		rfSpeed += rotateSpeed * power;
-		lbSpeed -= rotateSpeed * power;
-		rbSpeed += rotateSpeed * power;
+		double rotatePower = Math.abs(power / 3);
+		lfSpeed -= rotateSpeed * rotatePower;
+		rfSpeed += rotateSpeed * rotatePower;
+		lbSpeed -= rotateSpeed * rotatePower;
+		rbSpeed += rotateSpeed * rotatePower;
 		
 		updateMotors();
+	}
+	
+	public void switchFront() {
+			gearIsFront = !gearIsFront;
+			if (gearIsFront) {
+				System.out.println("The gear end is the front.");
+			}
+			else {
+				System.out.println("The intake end is the front.");
+			}
 	}
 	
 	public void updateMotors() {
