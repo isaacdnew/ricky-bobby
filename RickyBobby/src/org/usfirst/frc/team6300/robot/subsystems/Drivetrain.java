@@ -41,17 +41,16 @@ public class Drivetrain extends Subsystem {
 	 * @param minPower The minimum throttle that the robot can go at
 	 */
 	public void teleDrive(Joystick joy, int forwardAxis, int slideAxis, int rotateAxis, int throttleAxis, double minPower) {
-		double throttle = joy.getRawAxis(throttleAxis);
-		
 		//set power coefficient
-		double power = minPower + ((1 - minPower) * throttle);
+		if (minPower > 1) {
+			minPower = 1;
+		}
+		else if (minPower < 0) {
+			minPower = 0;
+		}
 		
-		if (power > 1) {
-			power = 1;
-		}
-		else if (power < -1) {
-			power = -1;
-		}
+		double throttle = joy.getRawAxis(throttleAxis);
+		double power = minPower + ((1 - minPower) * throttle);
 		
 		//forward
 		double forwardSpeed = joy.getRawAxis(forwardAxis);
