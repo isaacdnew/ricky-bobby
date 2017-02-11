@@ -38,38 +38,41 @@ public class Drivetrain extends Subsystem {
 	 * @param slideAxis The axis that, when positive, slides the robot to its right
 	 * @param rotationAxis The axis that, when positive, turns the robot clockwise
 	 * @param throttleAxis The axis that, when positive, increases the power coefficient
-	 * @param minThrottle The minimum throttle that the robot can go at
+	 * @param minPower The minimum throttle that the robot can go at
 	 */
-	public void teleDrive(Joystick joy, int forwardAxis, int slideAxis, int rotateAxis, int throttleAxis, double minThrottle) {
-		double forwardSpeed = joy.getRawAxis(forwardAxis);
-		double slideSpeed = joy.getRawAxis(slideAxis);
-		double rotateSpeed = joy.getRawAxis(rotateAxis);
+	public void teleDrive(Joystick joy, int forwardAxis, int slideAxis, int rotateAxis, int throttleAxis, double minPower) {
 		double throttle = joy.getRawAxis(throttleAxis);
 		
 		//set power coefficient
-		double power = throttle + minThrottle;
-		if (power > 1) {power = 1;}
-		else if (power < -1) {power = -1;}
-		power /= 3;
+		double power = minPower + ((1 - minPower) * throttle);
 		
+		if (power > 1) {
+			power = 1;
+		}
+		else if (power < -1) {
+			power = -1;
+		}
 		
 		//forward
+		double forwardSpeed = joy.getRawAxis(forwardAxis);
 		lfSpeed = forwardSpeed * power;
 		rfSpeed = forwardSpeed * power;
 		lbSpeed = forwardSpeed * power;
 		rbSpeed = forwardSpeed * power;
 		
 		//slide
+		double slideSpeed = joy.getRawAxis(slideAxis);
 		lfSpeed -= slideSpeed * power;
 		rfSpeed += slideSpeed * power;
 		lbSpeed += slideSpeed * power;
 		rbSpeed -= slideSpeed * power;
 		
 		//rotate
-		lfSpeed -= rotateSpeed * power;
-		rfSpeed += rotateSpeed * power;
-		lbSpeed -= rotateSpeed * power;
-		rbSpeed += rotateSpeed * power;
+		double rotateSpeed = joy.getRawAxis(rotateAxis) / 3;
+		lfSpeed -= rotateSpeed;
+		rfSpeed += rotateSpeed;
+		lbSpeed -= rotateSpeed;
+		rbSpeed += rotateSpeed;
 		
 		updateMotors();
 	}
