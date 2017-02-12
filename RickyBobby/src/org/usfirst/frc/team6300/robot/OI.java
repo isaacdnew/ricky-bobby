@@ -1,5 +1,6 @@
 package org.usfirst.frc.team6300.robot;
 
+import org.usfirst.frc.team6300.robot.commands.SwitchFront;
 import org.usfirst.frc.team6300.robot.commands.TeleShooter;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -12,12 +13,14 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI {
 	public static Joystick gamepadDr = new Joystick(RobotMap.gamepadDr);
+	public static Button frontSwitcher = new JoystickButton(gamepadDr, RobotMap.frontSwitcher);
 	
 	public static Joystick gamepadSh = new Joystick(RobotMap.gamepadSh);
-	public static Button spinUp = new JoystickButton(gamepadSh, RobotMap.spinUp);
+	public static Button shootToggler = new JoystickButton(gamepadSh, RobotMap.shootToggler);
 	
 	public OI() {
-		spinUp.toggleWhenPressed(new TeleShooter());
+		frontSwitcher.whenReleased(new SwitchFront());
+		shootToggler.toggleWhenPressed(new TeleShooter());
 	}
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a

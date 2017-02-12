@@ -9,13 +9,14 @@ package org.usfirst.frc.team6300.robot;
 public class RobotMap {
 	//oi
 	public static int gamepadDr = 0;
+	public static int frontSwitcher = 1;
 	public static int forwardAxis = 1;
 	public static int slideAxis = 0;
 	public static int rotateAxis = 4;
 	public static int throttleAxis = 3;
 	
 	public static int gamepadSh = 1;
-	public static int spinUp = 1;
+	public static int shootToggler = 1;
 	public static int pullAxis = 3;
 	public static int pushAxis = 2;
 	

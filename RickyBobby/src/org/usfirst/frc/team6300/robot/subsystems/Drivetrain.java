@@ -1,12 +1,12 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
-import org.usfirst.frc.team6300.robot.OI;
-import org.usfirst.frc.team6300.robot.RobotMap;
+import org.usfirst.frc.team6300.robot.*;
 import org.usfirst.frc.team6300.robot.commands.TeleDrive;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
@@ -28,13 +28,15 @@ public class Drivetrain extends PIDSubsystem {
 	double lbSpeed = 0;
 	double rbSpeed = 0;
 	
+	private boolean gearIsFront = false;
+	
 	//gyro:
 	static Gyro gyro = new ADXRS450_Gyro();
-	
-	String driveMode = "";
+	double pidOutput = 0;
 	
 	public Drivetrain() {
 		super("Drivetrain", 0.05, 0.0, 0.0);
+		setAbsoluteTolerance(0.5);
 		getPIDController().setContinuous(true);
 		setInputRange(0, 360);
 		setSetpoint(0);
@@ -54,54 +56,56 @@ public class Drivetrain extends PIDSubsystem {
 	 * @param throttleAxis The axis that, when positive, increases the power coefficient
 	 * @param minThrottle The minimum throttle that the robot can go at
 	 */
-	public void teleDrive(Joystick joy, int forwardAxis, int slideAxis, int rotateAxis, int throttleAxis, double minThrottle) {
-		double forwardSpeed = joy.getRawAxis(forwardAxis);
-		double slideSpeed = joy.getRawAxis(slideAxis);
-		double rotateSpeed = joy.getRawAxis(rotateAxis);
-		double throttle = joy.getRawAxis(throttleAxis);
-		
+	public void teleDrive(Joystick joy, int forwardAxis, int slideAxis, int rotateAxis, int throttleAxis, double minPower) {
 		//set power coefficient
-		double power = throttle + minThrottle;
-		if (power > 1) {power = 1;}
-		else if (power < -1) {power = -1;}
-		//power /= 3;
+		double throttle = joy.getRawAxis(throttleAxis);
+		if (minPower > 1) {
+			minPower = 1;
+		}
+		else if (minPower < 0) {
+			minPower = 0;
+		}
+		double power = minPower + ((1 - minPower) * throttle);
+		if (!gearIsFront) {
+			power = -power;
+		}
+		
+		//rotate
+		double rotateSpeed = (joy.getRawAxis(rotateAxis) / 3);
+		if (rotateSpeed < -0.01 || 0.01 < rotateSpeed) {
+			lfSpeed = rotateSpeed;
+			rfSpeed = -rotateSpeed;
+			lbSpeed = rotateSpeed;
+			rbSpeed = -rotateSpeed;
+			setSetpoint(gyro.getAngle());
+		}
+		SmartDashboard.putNumber("Setpoint", getSetpoint());
+		SmartDashboard.putNumber("Heading", gyro.getAngle());
+		lfSpeed += pidOutput;
+		rfSpeed -= pidOutput;
+		lbSpeed += pidOutput;
+		rbSpeed -= pidOutput;
 		
 		//forward
+		double forwardSpeed = joy.getRawAxis(forwardAxis);
 		lfSpeed += forwardSpeed * power;
 		rfSpeed += forwardSpeed * power;
 		lbSpeed += forwardSpeed * power;
 		rbSpeed += forwardSpeed * power;
 		
 		//slide
+		double slideSpeed = joy.getRawAxis(slideAxis);
 		lfSpeed -= slideSpeed * power;
 		rfSpeed += slideSpeed * power;
 		lbSpeed += slideSpeed * power;
 		rbSpeed -= slideSpeed * power;
 		
-		//rotate
-		if (rotateSpeed > -0.01 || 0.01 > rotateSpeed) {
-			setSetpoint(getSetpoint() + rotateSpeed * 5);
-		}
-		SmartDashboard.putNumber("Setpoint:", getSetpoint());
 		updateMotors();
 	}
 	
 	@Override
 	protected void usePIDOutput(double output) {
-		lfSpeed = -output;
-		rfSpeed = output;
-		lbSpeed = -output;
-		rbSpeed = output;
-		switch (driveMode) {
-		case "TeleOp": {
-			teleDrive(OI.gamepadDr, RobotMap.forwardAxis, RobotMap.slideAxis, RobotMap.rotateAxis, RobotMap.throttleAxis, 1);
-			break;
-		}
-		
-		case "Autonomous": {
-			break;
-		}
-		}
+		pidOutput = output;
 	}
 	
 	public void updateMotors() {
@@ -111,10 +115,6 @@ public class Drivetrain extends PIDSubsystem {
 		rbMotor.set(rbSpeed);
 	}
 	
-	public void setDriveMode(String newDriveMode) {
-		driveMode = newDriveMode;
-	}
-	
 	public void coast() {
 		lfMotor.set(0);
 		rfMotor.set(0);
@@ -122,18 +122,33 @@ public class Drivetrain extends PIDSubsystem {
 		rbMotor.set(0);
 	}
 	
+	public void switchFront() {
+		gearIsFront = !gearIsFront;
+		if (gearIsFront) {
+			System.out.println("The gear collector is the front.");
+		}
+		else {
+			System.out.println("The intake is the front.");
+		}
+	}
+	
 	public void calibrateGyro() {
 		coast();
+		disable();
 		System.out.println("Calibrating the gyro...");
 		gyro.calibrate();
 		System.out.println("Done!");
+		enable();
 	}
 	
 	/**
 	 * Puts the current heading to the SmartDashboard.
 	 */
-	public void putGyroValue() {
-		SmartDashboard.putNumber("Heading", gyro.getAngle());
+	
+	@Override
+	public void disable() {
+		super.disable();
+		pidOutput = 0;
 	}
 	
 	@Override
@@ -143,5 +158,28 @@ public class Drivetrain extends PIDSubsystem {
 	
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleDrive());
+	}
+	
+	public void goForward(double power, double seconds) {
+		lfSpeed = power;
+		rfSpeed = power;
+		lbSpeed = power;
+		rbSpeed = power;
+		updateMotors();
+		if (getPIDController().isEnabled()) {
+			for (int ms = 0; ms > seconds * 1000; ms += 5) {
+				lfSpeed += pidOutput;
+				rfSpeed -= pidOutput;
+				lbSpeed += pidOutput;
+				rbSpeed -= pidOutput;
+				updateMotors();
+				
+				Timer.delay(0.005);
+			}
+		}
+		else {
+			Timer.delay(seconds);
+		}
+		coast();
 	}
 }

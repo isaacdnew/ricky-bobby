@@ -2,9 +2,7 @@ package org.usfirst.frc.team6300.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-//import org.usfirst.frc.team6300.robot.OI;
-import org.usfirst.frc.team6300.robot.Robot;
-//import org.usfirst.frc.team6300.robot.RobotMap;
+import org.usfirst.frc.team6300.robot.*;
 
 /**
  *
@@ -18,16 +16,12 @@ public class TeleDrive extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Robot.drivetrain.disable();
-		Robot.drivetrain.calibrateGyro();
-		Robot.drivetrain.enable();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.drivetrain.putGyroValue();
-		Robot.drivetrain.setDriveMode("TeleOp");
+		Robot.drivetrain.teleDrive(OI.gamepadDr, RobotMap.forwardAxis, RobotMap.slideAxis, RobotMap.rotateAxis, RobotMap.throttleAxis, 0.5);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
