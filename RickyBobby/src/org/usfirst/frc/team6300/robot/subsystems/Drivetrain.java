@@ -53,21 +53,23 @@ public class Drivetrain extends Subsystem {
 		double power = minPower + ((1 - minPower) * throttle);
 		
 		//forward
-		double forwardSpeed = joy.getRawAxis(forwardAxis);
+		
+		double forwardSpeed = addDeadZone(joy.getRawAxis(forwardAxis));
+		
 		lfSpeed = forwardSpeed * power;
 		rfSpeed = forwardSpeed * power;
 		lbSpeed = forwardSpeed * power;
 		rbSpeed = forwardSpeed * power;
 		
 		//slide
-		double slideSpeed = joy.getRawAxis(slideAxis);
+		double slideSpeed = addDeadZone(joy.getRawAxis(slideAxis));
 		lfSpeed -= slideSpeed * power;
 		rfSpeed += slideSpeed * power;
 		lbSpeed += slideSpeed * power;
 		rbSpeed -= slideSpeed * power;
 		
 		//rotate
-		double rotateSpeed = joy.getRawAxis(rotateAxis) / 3;
+		double rotateSpeed = addDeadZone(joy.getRawAxis(rotateAxis)) / 3;
 		lfSpeed -= rotateSpeed;
 		rfSpeed += rotateSpeed;
 		lbSpeed -= rotateSpeed;
@@ -95,6 +97,21 @@ public class Drivetrain extends Subsystem {
 		rfMotor.set(0);
 		lbMotor.set(0);
 		rbMotor.set(0);
+	}
+	
+	private double addDeadZone(double rawAxisValue) {
+		double newAxisValue;
+		double deadZoneRadius = 0.1;
+		if (deadZoneRadius < rawAxisValue) {
+			newAxisValue = rawAxisValue - deadZoneRadius;
+		}
+		else if (rawAxisValue < -deadZoneRadius) {
+			newAxisValue = rawAxisValue + deadZoneRadius;
+		}
+		else {
+			newAxisValue = 0;
+		}
+		return newAxisValue;
 	}
 	
 	public void initDefaultCommand() {

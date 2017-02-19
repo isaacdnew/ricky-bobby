@@ -7,18 +7,6 @@ package org.usfirst.frc.team6300.robot;
  * floating around.
  */
 public class RobotMap {
-	//oi
-	public static int gamepadDr = 0;
-	public static int forwardAxis = 1;
-	public static int slideAxis = 0;
-	public static int rotateAxis = 4;
-	public static int throttleAxis = 3;
-	
-	public static int gamepadSh = 1;
-	public static int spinUp = 1;
-	public static int pullAxis = 3;
-	public static int pushAxis = 2;
-	
 	//drivetrain
 	public static int lfMotor = 3;
 	public static int rfMotor = 2;
