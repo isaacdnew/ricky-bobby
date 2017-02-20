@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team6300.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -40,6 +41,8 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", new TeleDrive());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
+		CameraServer.getInstance().startAutomaticCapture("Intake Camera", 0);
+		CameraServer.getInstance().startAutomaticCapture("Gear Camera", 1);
 	}
 	
 	/**

@@ -23,8 +23,8 @@ public class RobotMap {
 	//drivetrain
 	public static int lfMotor = 3;
 	public static int rfMotor = 2;
-	public static int lbMotor = 1;
-	public static int rbMotor = 0;
+	public static int lbMotor = 0;
+	public static int rbMotor = 1;
 	
 	public static boolean lfInverted = false;
 	public static boolean rfInverted = true;

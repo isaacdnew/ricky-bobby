@@ -48,13 +48,13 @@ public class Drivetrain extends Subsystem {
 		double throttle = joy.getRawAxis(throttleAxis);
 		
 		//set power coefficient
-		double power = minThrottle;
-		power += throttle / 2;
+		double power = minThrottle + ((1 - minThrottle) * throttle);
 		if (power > 1) {power = 1;}
 		else if (power < -1) {power = -1;}
 		if (!gearIsFront) {
 			power = -power;
 		}
+		//power /= 3;
 		
 		//forward
 		lfSpeed = forwardSpeed * power;
@@ -63,17 +63,16 @@ public class Drivetrain extends Subsystem {
 		rbSpeed = forwardSpeed * power;
 		
 		//slide
-		lfSpeed -= slideSpeed * power;
-		rfSpeed += slideSpeed * power;
-		lbSpeed += slideSpeed * power;
-		rbSpeed -= slideSpeed * power;
+		lfSpeed -= slideSpeed * power * 2;
+		rfSpeed += slideSpeed * power * 2;
+		lbSpeed += slideSpeed * power * 2;
+		rbSpeed -= slideSpeed * power * 2;
 		
 		//rotate
-		double rotatePower = Math.abs(power / 3);
-		lfSpeed -= rotateSpeed * rotatePower;
-		rfSpeed += rotateSpeed * rotatePower;
-		lbSpeed -= rotateSpeed * rotatePower;
-		rbSpeed += rotateSpeed * rotatePower;
+		lfSpeed -= rotateSpeed / 3;
+		rfSpeed += rotateSpeed / 3;
+		lbSpeed -= rotateSpeed / 3;
+		rbSpeed += rotateSpeed / 3;
 		
 		updateMotors();
 	}

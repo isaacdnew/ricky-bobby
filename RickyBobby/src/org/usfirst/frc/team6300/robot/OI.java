@@ -23,7 +23,7 @@ public class OI {
 	public OI() {
 		shooterButton.toggleWhenPressed(new TeleShooter());
 		agitatorButton.toggleWhenPressed(new TeleAgitator());
-		switchFrontButton.whenPressed(new SwitchFront());
+		switchFrontButton.whenReleased(new SwitchFront());
 	}
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
