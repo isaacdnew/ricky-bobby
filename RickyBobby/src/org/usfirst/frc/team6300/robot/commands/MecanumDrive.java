@@ -4,13 +4,12 @@ import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.Robot;
-import org.usfirst.frc.team6300.robot.RobotMap;
 
 /**
  *
  */
-public class TeleDrive extends Command {
-	public TeleDrive() {
+public class MecanumDrive extends Command {
+	public MecanumDrive() {
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.drivetrain);
 	}
@@ -18,13 +17,12 @@ public class TeleDrive extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		System.out.println("The gear end is the front.");
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.drivetrain.teleDrive(OI.gamepadDr, RobotMap.forwardAxis, RobotMap.slideAxis, RobotMap.rotateAxis, RobotMap.throttleAxis, 0.5);
+		Robot.drivetrain.teleDrive(OI.gamepadDr, OI.leftY, OI.leftX, OI.rightX, OI.rightTrigger, 1);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -42,6 +40,6 @@ public class TeleDrive extends Command {
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
-		Robot.drivetrain.brake();
+		Robot.drivetrain.coast();
 	}
 }

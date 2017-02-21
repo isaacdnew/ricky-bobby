@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		chooser.addDefault("Default Auto", new TeleDrive());
+		chooser.addDefault("Default Auto", new MecanumDrive());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 		CameraServer.getInstance().startAutomaticCapture("Intake Camera", 0);
@@ -57,7 +57,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
-		drivetrain.brake();
 	}
 	
 	/**

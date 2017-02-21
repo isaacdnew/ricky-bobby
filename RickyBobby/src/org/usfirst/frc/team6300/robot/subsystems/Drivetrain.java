@@ -1,7 +1,7 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.RobotMap;
-import org.usfirst.frc.team6300.robot.commands.TeleDrive;
+import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -39,52 +39,53 @@ public class Drivetrain extends Subsystem {
 	 * @param slideAxis The axis that, when positive, slides the robot to its right
 	 * @param rotationAxis The axis that, when positive, turns the robot clockwise
 	 * @param throttleAxis The axis that, when positive, increases the power coefficient
-	 * @param minThrottle The minimum throttle that the robot can go at
+	 * @param minPower The minimum throttle that the robot can go at
 	 */
-	public void teleDrive(Joystick joy, int forwardAxis, int slideAxis, int rotateAxis, int throttleAxis, double minThrottle) {
-		double forwardSpeed = joy.getRawAxis(forwardAxis);
-		double slideSpeed = joy.getRawAxis(slideAxis);
-		double rotateSpeed = joy.getRawAxis(rotateAxis);
-		double throttle = joy.getRawAxis(throttleAxis);
-		
+	public void teleDrive(Joystick joy, int forwardAxis, int slideAxis, int rotateAxis, int throttleAxis, double minPower) {
 		//set power coefficient
-		double power = minThrottle + ((1 - minThrottle) * throttle);
-		if (power > 1) {power = 1;}
-		else if (power < -1) {power = -1;}
-		if (!gearIsFront) {
-			power = -power;
+		if (minPower > 1) {
+			minPower = 1;
 		}
-		//power /= 3;
+		else if (minPower < 0) {
+			minPower = 0;
+		}
+		
+		double throttle = joy.getRawAxis(throttleAxis);
+		double power = minPower + ((1 - minPower) * throttle);
 		
 		//forward
+		double forwardSpeed = addDeadZone(joy.getRawAxis(forwardAxis));
+		
 		lfSpeed = forwardSpeed * power;
 		rfSpeed = forwardSpeed * power;
 		lbSpeed = forwardSpeed * power;
 		rbSpeed = forwardSpeed * power;
 		
 		//slide
-		lfSpeed -= slideSpeed * power * 2;
-		rfSpeed += slideSpeed * power * 2;
-		lbSpeed += slideSpeed * power * 2;
-		rbSpeed -= slideSpeed * power * 2;
+		double slideSpeed = addDeadZone(joy.getRawAxis(slideAxis));
+		lfSpeed -= slideSpeed * power;
+		rfSpeed += slideSpeed * power;
+		lbSpeed += slideSpeed * power;
+		rbSpeed -= slideSpeed * power;
 		
 		//rotate
-		lfSpeed -= rotateSpeed / 3;
-		rfSpeed += rotateSpeed / 3;
-		lbSpeed -= rotateSpeed / 3;
-		rbSpeed += rotateSpeed / 3;
+		double rotateSpeed = addDeadZone(joy.getRawAxis(rotateAxis)) / 3;
+		lfSpeed -= rotateSpeed;
+		rfSpeed += rotateSpeed;
+		lbSpeed -= rotateSpeed;
+		rbSpeed += rotateSpeed;
 		
 		updateMotors();
 	}
 	
 	public void switchFront() {
-			gearIsFront = !gearIsFront;
-			if (gearIsFront) {
-				System.out.println("The gear end is the front.");
-			}
-			else {
-				System.out.println("The intake end is the front.");
-			}
+		gearIsFront = !gearIsFront;
+		if (gearIsFront) {
+			System.out.println("The gear end is the front.");
+		}
+		else {
+			System.out.println("The intake end is the front.");
+		}
 	}
 	
 	public void updateMotors() {
@@ -94,13 +95,6 @@ public class Drivetrain extends Subsystem {
 		rbMotor.set(rbSpeed);
 	}
 	
-	public void brake() {
-		lfMotor.stopMotor();
-		rfMotor.stopMotor();
-		lbMotor.stopMotor();
-		rbMotor.stopMotor();
-	}
-	
 	public void coast() {
 		lfMotor.set(0);
 		rfMotor.set(0);
@@ -108,7 +102,22 @@ public class Drivetrain extends Subsystem {
 		rbMotor.set(0);
 	}
 	
+	private double addDeadZone(double rawAxisValue) {
+		double newAxisValue;
+		double deadZoneRadius = 0.1;
+		if (deadZoneRadius < rawAxisValue) {
+			newAxisValue = rawAxisValue - deadZoneRadius;
+		}
+		else if (rawAxisValue < -deadZoneRadius) {
+			newAxisValue = rawAxisValue + deadZoneRadius;
+		}
+		else {
+			newAxisValue = 0;
+		}
+		return newAxisValue;
+	}
+	
 	public void initDefaultCommand() {
-		setDefaultCommand(new TeleDrive());
+		setDefaultCommand(new MecanumDrive());
 	}
 }
