@@ -2,6 +2,7 @@ package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.RobotMap;
+import org.usfirst.frc.team6300.robot.commands.TeleShooter;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
@@ -32,7 +33,7 @@ public class Shooter extends Subsystem {
 			spinUp(-0.5);
 		}
 		else {
-			Timer.delay(0.005);
+			stop();
 		}
 	}
 	
@@ -46,6 +47,7 @@ public class Shooter extends Subsystem {
 	}
 	
 	public void initDefaultCommand() {
+		setDefaultCommand(new TeleShooter());
 	}
 }
 

@@ -4,6 +4,7 @@ import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.Robot;
 import org.usfirst.frc.team6300.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -23,6 +24,9 @@ public class TeleAgitator extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	if (OI.gamepadSh.getRawButton(RobotMap.y)) {
+    		while (OI.gamepadSh.getRawButton(RobotMap.y)) {
+    			Timer.delay(0.005);
+    		}
     		Robot.agitator.switchDirections();
     	}
     }
