@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	
 	public static Drivetrain drivetrain = new Drivetrain();
 	public static Shooter shooter = new Shooter();
-	public static Intake intake = new Intake();
+	public static Climber climber = new Climber();
 	public static Agitator agitator = new Agitator();
 	
 	Command autonomousCommand;
@@ -41,8 +41,8 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", new MecanumDrive());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
-		CameraServer.getInstance().startAutomaticCapture("Intake Camera", 0);
-		CameraServer.getInstance().startAutomaticCapture("Gear Camera", 1);
+		//CameraServer.getInstance().startAutomaticCapture("Climber Camera", 1);
+		//CameraServer.getInstance().startAutomaticCapture("Gear Camera", 0);
 	}
 	
 	/**

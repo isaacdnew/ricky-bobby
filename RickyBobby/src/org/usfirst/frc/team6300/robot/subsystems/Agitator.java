@@ -11,14 +11,21 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Agitator extends Subsystem {
 	static SpeedController motors = new VictorSP(RobotMap.agitatorController);
+	double speed;
 	
 	public Agitator() {
 		motors.setInverted(RobotMap.agitatorInverted);
 	}
 	
-	public void spinUp(double speed) {
+	public void spinUp(double newSpeed) {
+		speed = newSpeed;
 		motors.set(speed);
 		System.out.println("Agitators on at power " + speed + ".");
+	}
+	
+	public void switchDirections() {
+		speed = -speed;
+		spinUp(speed);
 	}
 	
 	public void stop() {

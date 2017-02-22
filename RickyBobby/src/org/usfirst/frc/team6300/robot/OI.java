@@ -18,8 +18,8 @@ public class OI {
 	public static int leftX = 0;
 	public static int leftY = 1;
 	
-	public static int rightTrigger = 3;
-	public static int leftTrigger = 2;
+	public static int rightTrig = 3;
+	public static int leftTrig = 2;
 	
 	public static Joystick gamepadDr = new Joystick(0);
 	public static Button drButtonA = new JoystickButton(gamepadDr, 1);

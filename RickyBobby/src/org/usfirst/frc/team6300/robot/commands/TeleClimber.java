@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class TeleIntake extends Command {
+public class TeleClimber extends Command {
 
-    public TeleIntake() {
-        requires(Robot.intake);
+    public TeleClimber() {
+        requires(Robot.climber);
     }
 
     // Called just before this Command runs the first time
@@ -20,7 +20,7 @@ public class TeleIntake extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intake.setSpeed(OI.gamepadSh.getRawAxis(OI.rightTrigger) - OI.gamepadSh.getRawAxis(OI.leftTrigger));
+    	Robot.climber.setSpeed(OI.gamepadSh.getRawAxis(OI.rightTrig) - OI.gamepadSh.getRawAxis(OI.leftTrig));
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -30,12 +30,12 @@ public class TeleIntake extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.intake.stop();
+    	Robot.climber.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.intake.stop();
+    	Robot.climber.stop();
     }
 }

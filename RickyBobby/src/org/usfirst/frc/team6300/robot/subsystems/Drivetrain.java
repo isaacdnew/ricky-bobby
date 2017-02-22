@@ -23,6 +23,7 @@ public class Drivetrain extends Subsystem {
 	double rfSpeed = 0;
 	double lbSpeed = 0;
 	double rbSpeed = 0;
+	
 	boolean gearIsFront = true;
 	
 	public Drivetrain() {
@@ -52,6 +53,9 @@ public class Drivetrain extends Subsystem {
 		
 		double throttle = joy.getRawAxis(throttleAxis);
 		double power = minPower + ((1 - minPower) * throttle);
+		if (!gearIsFront) {
+			power = -power;
+		}
 		
 		//forward
 		double forwardSpeed = addDeadZone(joy.getRawAxis(forwardAxis));

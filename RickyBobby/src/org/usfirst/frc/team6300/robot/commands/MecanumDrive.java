@@ -22,7 +22,7 @@ public class MecanumDrive extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.drivetrain.teleDrive(OI.gamepadDr, OI.leftY, OI.leftX, OI.rightX, OI.rightTrigger, 1);
+		Robot.drivetrain.teleDrive(OI.gamepadDr, OI.leftY, OI.leftX, OI.rightX, OI.rightTrig, 1);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
