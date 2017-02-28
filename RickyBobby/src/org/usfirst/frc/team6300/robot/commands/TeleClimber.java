@@ -20,7 +20,7 @@ public class TeleClimber extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.climber.setSpeed(OI.gamepadSh.getRawAxis(OI.rightTrig) - OI.gamepadSh.getRawAxis(OI.leftTrig));
+    	Robot.climber.setSpeed(OI.gamepadSh.getRawAxis(OI.rightTrigger) - OI.gamepadSh.getRawAxis(OI.leftTrigger));
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -13,13 +13,20 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	public static int rightX = 4;
+	//generic joystick mappings
+	public static int leftXAxis = 0;
+	public static int leftYAxis = 1;
+	public static int leftTrigger = 2;
+	public static int rightTrigger = 3;
+	public static int rightXAxis = 4;
+	public static int rightYAxis = 5;
 	
-	public static int leftX = 0;
-	public static int leftY = 1;
-	
-	public static int rightTrig = 3;
-	public static int leftTrig = 2;
+	public static int a = 1;
+	public static int b = 2;
+	public static int x = 3;
+	public static int y = 4;
+	public static int lTrigButton = 5;
+	public static int rTrigButton = 6;
 	
 	public static Joystick gamepadDr = new Joystick(0);
 	public static Button drButtonA = new JoystickButton(gamepadDr, 1);

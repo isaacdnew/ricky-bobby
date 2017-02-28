@@ -6,22 +6,7 @@ package org.usfirst.frc.team6300.robot;
  * the wiring easier and significantly reduces the number of magic numbers
  * floating around.
  */
-public class RobotMap {
-	//generic joystick mappings
-	public static int leftXAxis = 0;
-	public static int leftYAxis = 1;
-	public static int leftTrigger = 2;
-	public static int rightTrigger = 3;
-	public static int rightXAxis = 4;
-	public static int rightYAxis = 5;
-	
-	public static int a = 1;
-	public static int b = 2;
-	public static int x = 3;
-	public static int y = 4;
-	public static int lButton = 5;
-	public static int rButton = 6;
-	
+public class RobotMap {	
 	//drivetrain
 	public static int lfMotor = 3;
 	public static int rfMotor = 2;
