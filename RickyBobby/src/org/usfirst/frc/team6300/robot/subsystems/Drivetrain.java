@@ -5,6 +5,7 @@ import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -119,6 +120,15 @@ public class Drivetrain extends Subsystem {
 			newAxisValue = 0;
 		}
 		return newAxisValue;
+	}
+	
+	public void goForward(double power, double seconds) {
+		lfMotor.set(power);
+		rfMotor.set(power);
+		lbMotor.set(power);
+		rbMotor.set(power);
+		Timer.delay(seconds);
+		coast();
 	}
 	
 	public void initDefaultCommand() {

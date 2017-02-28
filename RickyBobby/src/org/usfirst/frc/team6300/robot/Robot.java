@@ -1,9 +1,9 @@
 
 package org.usfirst.frc.team6300.robot;
 
-import edu.wpi.first.wpilibj.CameraServer;
+//import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
+//import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -27,10 +27,12 @@ public class Robot extends IterativeRobot {
 	public static Shooter shooter = new Shooter();
 	public static Climber climber = new Climber();
 	public static Agitator agitator = new Agitator();
+	private static DeliverGear deliverGear;
 	
-	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
-	
+	//Command autonomousCommand;
+	String station;
+	//SendableChooser<Command> chooser = new SendableChooser<>();
+	SendableChooser<String> chooser = new SendableChooser<>();
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -38,8 +40,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		chooser.addDefault("Default Auto", new MecanumDrive());
+		//chooser.addDefault("Default Auto", new MecanumDrive());
 		// chooser.addObject("My Auto", new MyAutoCommand());
+		chooser.addObject("Left Alliance Station", "left");
+		chooser.addDefault("Center Alliance Station", "center");
+		chooser.addObject("Right Alliance Station", "right");
 		SmartDashboard.putData("Auto mode", chooser);
 		//CameraServer.getInstance().startAutomaticCapture("Climber Camera", 1);
 		//CameraServer.getInstance().startAutomaticCapture("Gear Camera", 0);
@@ -72,7 +77,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = chooser.getSelected();
+		//autonomousCommand = chooser.getSelected();
+		station = chooser.getSelected();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -82,8 +88,10 @@ public class Robot extends IterativeRobot {
 		 */
 
 		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
-			autonomousCommand.start();
+		//if (autonomousCommand != null)
+		//	autonomousCommand.start();
+		deliverGear = new DeliverGear(station);
+		deliverGear.start();
 	}
 
 	/**
@@ -100,8 +108,10 @@ public class Robot extends IterativeRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		if (autonomousCommand != null)
-			autonomousCommand.cancel();
+		
+		//if (autonomousCommand != null)
+		//	autonomousCommand.cancel();
+		deliverGear.cancel();
 	}
 
 	/**
