@@ -1,7 +1,6 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.RobotMap;
-import org.usfirst.frc.team6300.robot.commands.TeleShooter;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -12,25 +11,29 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Shooter extends Subsystem {
 	static SpeedController flyMotor = new VictorSP(RobotMap.flyMotor);
+	double speed;
 	
 	public Shooter() {
 		flyMotor.setInverted(RobotMap.flyInverted);
 	}
 	
-	public void spinUp(double speed) {
+	public void spinUp(double newSpeed) {
+		speed = newSpeed;
 		flyMotor.set(speed);
-		if (speed == 0) {
-			System.out.println("Shooter off.");
-		}
-		System.out.println("Shooter on at power" + speed + ".");
+		System.out.println("Shooter on at power " + speed + ".");
+	}
+	
+	public double getSpeed() {
+		return speed;
 	}
 	
 	public void stop() {
+		speed = 0;
 		flyMotor.stopMotor();
+		System.out.println("Shooter off.");
 	}
 	
 	public void initDefaultCommand() {
-		setDefaultCommand(new TeleShooter());
 	}
 }
 

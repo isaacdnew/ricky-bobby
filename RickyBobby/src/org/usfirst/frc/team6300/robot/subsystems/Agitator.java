@@ -23,14 +23,14 @@ public class Agitator extends Subsystem {
 		System.out.println("Agitators on at power " + speed + ".");
 	}
 	
-	public void switchDirections() {
-		speed = -speed;
-		spinUp(speed);
+	public double getSpeed() {
+		return speed;
 	}
 	
 	public void stop() {
+		speed = 0;
 		agitatorMotor.stopMotor();
-		System.out.println("Agitators off.");
+		System.out.println("Agitator off.");
 	}
 	
 	public void initDefaultCommand() {

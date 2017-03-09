@@ -34,10 +34,16 @@ public class OI {
 	public static Joystick gamepadSh = new Joystick(1);
 	public static Button shButtonA = new JoystickButton(gamepadSh, a);
 	public static Button shButtonB = new JoystickButton(gamepadSh, b);
+	public static Button shButtonX = new JoystickButton(gamepadSh, x);
+	public static Button shButtonY = new JoystickButton(gamepadSh, y);
 	
 	public OI() {
-		shButtonB.toggleWhenPressed(new TeleAgitator());
+		shButtonB.whenReleased(new TeleAgitator('b'));
+		shButtonY.whenReleased(new TeleAgitator('y'));
+		
 		drButtonA.whenReleased(new SwitchFront());
-		shButtonA.toggleWhenPressed(new TeleShooter());
+		
+		shButtonA.whenReleased(new TeleShooter('a'));
+		shButtonX.whenReleased(new TeleShooter('x'));
 	}
 }
