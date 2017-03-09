@@ -31,6 +31,6 @@ public class RobotMap {
 	public static boolean climberInverted = true;
 	
 	//agitator controller
-	public static int agitatorController = 7;
+	public static int agitatorMotor = 7;
 	public static boolean agitatorInverted = false;
 }

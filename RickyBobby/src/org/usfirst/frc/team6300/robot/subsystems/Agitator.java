@@ -10,16 +10,16 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Agitator extends Subsystem {
-	static SpeedController motors = new VictorSP(RobotMap.agitatorController);
+	static SpeedController agitatorMotor = new VictorSP(RobotMap.agitatorMotor);
 	double speed;
 	
 	public Agitator() {
-		motors.setInverted(RobotMap.agitatorInverted);
+		agitatorMotor.setInverted(RobotMap.agitatorInverted);
 	}
 	
 	public void spinUp(double newSpeed) {
 		speed = newSpeed;
-		motors.set(speed);
+		agitatorMotor.set(speed);
 		System.out.println("Agitators on at power " + speed + ".");
 	}
 	
@@ -29,7 +29,7 @@ public class Agitator extends Subsystem {
 	}
 	
 	public void stop() {
-		motors.stopMotor();
+		agitatorMotor.stopMotor();
 		System.out.println("Agitators off.");
 	}
 	
