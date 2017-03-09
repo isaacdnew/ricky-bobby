@@ -98,6 +98,7 @@ public class Drivetrain extends Subsystem {
 		rfMotor.set(rfSpeed);
 		lbMotor.set(lbSpeed);
 		rbMotor.set(rbSpeed);
+		//System.out.println("Motor Speeds- lf: " + lfSpeed + " rf: " + rfSpeed + " lb: " + lbSpeed + " rb: " + rbSpeed);
 	}
 	
 	public void coast() {
@@ -109,7 +110,7 @@ public class Drivetrain extends Subsystem {
 	
 	private double addDeadZone(double rawAxisValue) {
 		double newAxisValue;
-		double deadZoneRadius = 0.1;
+		double deadZoneRadius = 0.2;
 		if (deadZoneRadius < rawAxisValue) {
 			newAxisValue = rawAxisValue - deadZoneRadius;
 		}

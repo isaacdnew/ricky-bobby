@@ -29,11 +29,11 @@ public class OI {
 	public static int rTrigButton = 6;
 	
 	public static Joystick gamepadDr = new Joystick(0);
-	public static Button drButtonA = new JoystickButton(gamepadDr, 1);
+	public static Button drButtonA = new JoystickButton(gamepadDr, a);
 	
 	public static Joystick gamepadSh = new Joystick(1);
-	public static Button shButtonA = new JoystickButton(gamepadSh, 1);
-	public static Button shButtonB = new JoystickButton(gamepadSh, 2);
+	public static Button shButtonA = new JoystickButton(gamepadSh, a);
+	public static Button shButtonB = new JoystickButton(gamepadSh, b);
 	
 	public OI() {
 		shButtonB.toggleWhenPressed(new TeleAgitator());
