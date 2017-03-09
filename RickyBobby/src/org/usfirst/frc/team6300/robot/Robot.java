@@ -25,6 +25,7 @@ public class Robot extends IterativeRobot {
 	
 	public static Drivetrain drivetrain = new Drivetrain();
 	public static Shooter shooter = new Shooter();
+	public static Intake intake = new Intake();
 	public static Climber climber = new Climber();
 	public static Agitator agitator = new Agitator();
 	private static DeliverGear deliverGear;
@@ -111,7 +112,9 @@ public class Robot extends IterativeRobot {
 		
 		//if (autonomousCommand != null)
 		//	autonomousCommand.cancel();
-		deliverGear.cancel();
+		if (deliverGear != null) {
+			deliverGear.cancel();
+		}
 	}
 
 	/**

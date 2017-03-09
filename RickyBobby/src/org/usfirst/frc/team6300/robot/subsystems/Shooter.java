@@ -20,26 +20,30 @@ public class Shooter extends Subsystem {
 	}
 	
 	public void update() {
-		if (OI.gamepadSh.getRawButton(1)) {
-			while (OI.gamepadSh.getRawButton(1)) {
+		if (OI.gamepadSh.getRawButton(OI.a)) {
+			while (OI.gamepadSh.getRawButton(OI.a)) {
 				Timer.delay(0.005);
 			}
 			spinUp(1);
 		}
-		else if (OI.gamepadSh.getRawButton(3)) {
-			while (OI.gamepadSh.getRawButton(3)) {
+		else if (OI.gamepadSh.getRawButton(OI.x)) {
+			while (OI.gamepadSh.getRawButton(OI.x)) {
 				Timer.delay(0.005);
 			}
 			spinUp(-0.5);
 		}
 		else {
 			stop();
+			System.out.println("Shooter off.");
+			while (!OI.gamepadSh.getRawButton(OI.a) && !OI.gamepadSh.getRawButton(OI.x)) {
+				Timer.delay(0.005);
+			}
 		}
 	}
 	
 	private void spinUp(double speed) {
 		flyMotor.set(speed);
-		System.out.println("Spinning up the shooter!");
+		System.out.println("Shooter on at power" + speed + ".");
 	}
 	
 	public void stop() {

@@ -2,6 +2,7 @@ package org.usfirst.frc.team6300.robot.commands;
 
 import org.usfirst.frc.team6300.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -47,18 +48,21 @@ public class DeliverGear extends Command {
 	}
 	
 	private void deliverFromLeft() {
-		Robot.drivetrain.goForward(0.5, 5);
-		//Robot.drivetrain.turnRight(0.5, 0.2);
+		Robot.drivetrain.goForward(0.3, 2);
+		Timer.delay(0.5);
+		Robot.drivetrain.turnRight(0.3, 0.7);
 	}
 	
 	private void deliverFromCenter() {
-		Robot.drivetrain.goForward(0.5, 5);
-		//Robot.drivetrain.wiggle(0.5, 0.3, 4);
+		Robot.drivetrain.goForward(0.3, 2.5);
+		Timer.delay(0.5);
+		Robot.drivetrain.wiggleForward(0.2, 0.05, 0.3, 4);
 	}
 	
 	private void deliverFromRight() {
-		Robot.drivetrain.goForward(0.5, 5);
-		//Robot.drivetrain.turnLeft(0.5, 0.2);
+		Robot.drivetrain.goForward(0.3, 2);
+		Timer.delay(0.5);
+		Robot.drivetrain.turnLeft(0.3, 0.7);
 	}
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run

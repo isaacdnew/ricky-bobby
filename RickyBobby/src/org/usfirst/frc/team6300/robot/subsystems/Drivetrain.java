@@ -52,7 +52,7 @@ public class Drivetrain extends Subsystem {
 			minPower = 0;
 		}
 		
-		double throttle = joy.getRawAxis(throttleAxis);
+		double throttle = 1 - joy.getRawAxis(throttleAxis);
 		double power = minPower + ((1 - minPower) * throttle);
 		if (!gearIsFront) {
 			power = -power;
@@ -128,6 +128,36 @@ public class Drivetrain extends Subsystem {
 		lbMotor.set(power);
 		rbMotor.set(power);
 		Timer.delay(seconds);
+		coast();
+	}
+	
+	public void turnRight(double power, double seconds) {
+		lfMotor.set(power);
+		rfMotor.set(power);
+		lbMotor.set(-power);
+		rbMotor.set(-power);
+		Timer.delay(seconds);
+		coast();
+	}
+	
+	public void turnLeft(double power, double seconds) {
+		lfMotor.set(-power);
+		rfMotor.set(-power);
+		lbMotor.set(power);
+		rbMotor.set(power);
+		Timer.delay(seconds);
+		coast();
+	}
+	
+	public void wiggleForward(double slidePower, double forwardPower, double amplitudeInSeconds, int iterations) {
+		for (int i = 0; i < (iterations * 2); i++) {	
+			lfMotor.set(-slidePower + forwardPower);
+			rfMotor.set(slidePower + forwardPower);
+			lbMotor.set(slidePower + forwardPower);
+			rbMotor.set(-slidePower + forwardPower);
+			Timer.delay(amplitudeInSeconds);
+			slidePower = -slidePower;
+		}
 		coast();
 	}
 	
