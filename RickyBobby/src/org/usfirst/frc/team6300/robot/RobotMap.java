@@ -24,11 +24,11 @@ public class RobotMap {
 	
 	//intake
 	public static int intakeMotor = 4;
-	public static boolean intakeInverted = true;
+	public static boolean intakeInverted = false;
 	
 	//climber
 	public static int climberMotor = 5;
-	public static boolean climberInverted = true;
+	public static boolean climberInverted = false;
 	
 	//agitator controller
 	public static int agitatorMotor = 7;
