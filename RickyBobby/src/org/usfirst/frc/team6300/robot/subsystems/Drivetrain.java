@@ -7,12 +7,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 /**
  * The drivetrain, consisting of four drive motors.
  */
-public class Drivetrain extends Subsystem {
+public class Drivetrain extends PIDSubsystem {
 	//motors:
 	static SpeedController lfMotor = new VictorSP(RobotMap.lfMotor);
 	static SpeedController rfMotor = new VictorSP(RobotMap.rfMotor);
@@ -25,13 +26,35 @@ public class Drivetrain extends Subsystem {
 	double lbSpeed = 0;
 	double rbSpeed = 0;
 	
+	static Gyro gyro;
+	static double pidOutput = 0;
+	
 	boolean gearIsFront = true;
 	
 	public Drivetrain() {
+		super(0.01, 0, 0, 0);
 		lfMotor.setInverted(RobotMap.lfInverted);
 		rfMotor.setInverted(RobotMap.rfInverted);
 		lbMotor.setInverted(RobotMap.lbInverted);
 		rbMotor.setInverted(RobotMap.rbInverted);
+	}
+	
+	protected double returnPIDInput() {
+		return gyro.getAngle();
+	}
+	
+	protected void usePIDOutput(double output) {
+		pidOutput = output;
+	}
+	
+	@Override
+	public void disable() {
+		super.disable();
+		pidOutput = 0;
+	}
+	
+	public void initDefaultCommand() {
+		setDefaultCommand(new MecanumDrive());
 	}
 	
 	/**
@@ -160,9 +183,5 @@ public class Drivetrain extends Subsystem {
 			slidePower = -slidePower;
 		}
 		coast();
-	}
-	
-	public void initDefaultCommand() {
-		setDefaultCommand(new MecanumDrive());
 	}
 }

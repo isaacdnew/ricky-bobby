@@ -54,6 +54,7 @@ public class DeliverGear extends Command {
 	}
 	
 	private void deliverFromCenter() {
+		Robot.drivetrain.enable();
 		Robot.drivetrain.goForward(0.3, 2.5);
 		Timer.delay(0.5);
 		Robot.drivetrain.wiggleForward(0.2, 0.05, 0.3, 4);
@@ -64,6 +65,7 @@ public class DeliverGear extends Command {
 		Timer.delay(0.5);
 		Robot.drivetrain.turnLeft(0.3, 0.7);
 	}
+	
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {

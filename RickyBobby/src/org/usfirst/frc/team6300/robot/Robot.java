@@ -3,7 +3,7 @@ package org.usfirst.frc.team6300.robot;
 
 //import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-//import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -30,10 +30,10 @@ public class Robot extends IterativeRobot {
 	public static Agitator agitator = new Agitator();
 	private static DeliverGear deliverGear;
 	
-	//Command autonomousCommand;
+	Command autonomousCommand;
 	String station;
-	//SendableChooser<Command> chooser = new SendableChooser<>();
-	SendableChooser<String> chooser = new SendableChooser<>();
+	SendableChooser<Command> commandChooser = new SendableChooser<>();
+	SendableChooser<String> stationChooser = new SendableChooser<>();
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -41,12 +41,15 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		//chooser.addDefault("Default Auto", new MecanumDrive());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		chooser.addObject("Left Alliance Station", "left");
-		chooser.addDefault("Center Alliance Station", "center");
-		chooser.addObject("Right Alliance Station", "right");
-		SmartDashboard.putData("Auto mode", chooser);
+		commandChooser.addDefault("Deliver Gear", new DeliverGear(station));
+		commandChooser.addObject("Tune PID", new TunePID());
+		
+		stationChooser.addObject("Left Alliance Station", "left");
+		stationChooser.addDefault("Center Alliance Station", "center");
+		stationChooser.addObject("Right Alliance Station", "right");
+		
+		SmartDashboard.putData("Auto Command Chooser", commandChooser);
+		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
 		//CameraServer.getInstance().startAutomaticCapture("Climber Camera", 1);
 		//CameraServer.getInstance().startAutomaticCapture("Gear Camera", 0);
 	}
@@ -78,21 +81,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		//autonomousCommand = chooser.getSelected();
-		station = chooser.getSelected();
-
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
-
+		autonomousCommand = commandChooser.getSelected();
+		if (autonomousCommand == new DeliverGear(station)) {
+			station = stationChooser.getSelected();
+		}
 		// schedule the autonomous command (example)
-		//if (autonomousCommand != null)
-		//	autonomousCommand.start();
-		deliverGear = new DeliverGear(station);
-		deliverGear.start();
+		if (autonomousCommand != null)
+			autonomousCommand.start();
 	}
 
 	/**
