@@ -3,6 +3,7 @@ package org.usfirst.frc.team6300.robot.subsystems;
 import org.usfirst.frc.team6300.robot.RobotMap;
 import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
@@ -26,36 +27,193 @@ public class Drivetrain extends PIDSubsystem {
 	double lbSpeed = 0;
 	double rbSpeed = 0;
 	
+	//heading control:
 	static Gyro gyro;
-	static double pidOutput = 0;
+	double lfOutput = 0;
+	double rfOutput = 0;
+	double lbOutput = 0;
+	double rbOutput = 0;
 	
 	boolean gearIsFront = true;
 	
 	public Drivetrain() {
-		super(0.01, 0, 0, 0);
+		super(0.01, 0.0, 0.0, 0.0);
+		gyro = new ADXRS450_Gyro();
+		getPIDController().setOutputRange(-1, 1);
+		getPIDController().setPercentTolerance(2);
+		getPIDController().setContinuous(true);
+		getPIDController().setInputRange(0, 360);
+		
 		lfMotor.setInverted(RobotMap.lfInverted);
 		rfMotor.setInverted(RobotMap.rfInverted);
 		lbMotor.setInverted(RobotMap.lbInverted);
 		rbMotor.setInverted(RobotMap.rbInverted);
 	}
 	
+	public void initDefaultCommand() {
+		setDefaultCommand(new MecanumDrive());
+	}
+	
+	//////////////////////////
+	/// Autonomous Methods ///
+	//////////////////////////
+	
 	protected double returnPIDInput() {
-		return gyro.getAngle();
+		double angle = gyro.getAngle();
+		angle -= 360 * Math.floor(angle/360);
+		return angle;
 	}
 	
 	protected void usePIDOutput(double output) {
-		pidOutput = output;
+		lfOutput = output;
+		rfOutput = -output;
+		lbOutput = output;
+		rbOutput = -output;
+		
+		lfOutput += lfSpeed;
+		rfOutput += rfSpeed;
+		lbOutput += lbSpeed;
+		rbOutput += rbSpeed;
+		
+		if (lfOutput > 1 || rfOutput > 1 || lbOutput > 1 || rbOutput > 1) {
+			double maxOutput = findMax(lfOutput, rfOutput, lbOutput, rbOutput);
+			lfOutput /= maxOutput;
+			rfOutput /= maxOutput;
+			lbOutput /= maxOutput;
+			rbOutput /= maxOutput;
+		}
+		
+		lfMotor.set(lfOutput);
+		rfMotor.set(rfOutput);
+		lbMotor.set(lbOutput);
+		rbMotor.set(rbOutput);
 	}
 	
 	@Override
 	public void disable() {
 		super.disable();
-		pidOutput = 0;
+		lfOutput = 0;
+		rfOutput = 0;
+		lbOutput = 0;
+		rbOutput = 0;
 	}
 	
-	public void initDefaultCommand() {
-		setDefaultCommand(new MecanumDrive());
+	public void calibrateGyro() {
+		disable();
+		gyro.calibrate();
 	}
+	
+	public void goForward(double power, double seconds) {
+		if (getPIDController().isEnabled()) {
+			lfSpeed = power;
+			rfSpeed = power;
+			lbSpeed = power;
+			rbSpeed = power;
+		}
+		else {
+			lfMotor.set(power);
+			rfMotor.set(power);
+			lbMotor.set(power);
+			rbMotor.set(power);
+		}
+		Timer.delay(seconds);
+		stop();
+	}
+	
+	public void turnRight(double degrees) {
+		if (!getPIDController().isEnabled()) {
+			enable();
+		}
+		setSetpoint(getSetpoint() + degrees);
+	}
+	
+	public void turnRight(double power, double seconds) {
+		lfMotor.set(power);
+		rfMotor.set(-power);
+		lbMotor.set(power);
+		rbMotor.set(-power);
+	}
+	
+	public void turnLeft(double degrees) {
+		if (!getPIDController().isEnabled()) {
+			enable();
+		}
+		setSetpoint(getSetpoint() - degrees);
+	}
+	
+	public void turnLeft(double power, double seconds) {
+		lfMotor.set(-power);
+		rfMotor.set(power);
+		lbMotor.set(-power);
+		rbMotor.set(power);
+	}
+	
+	public void wiggleForward(double slidePower, double forwardPower, double amplitudeInSeconds, int iterations) {
+		if (!getPIDController().isEnabled()) {
+			enable();
+		}
+		for (int i = 0; i < (iterations * 2); i++) {	
+			lfSpeed = -slidePower + forwardPower;
+			rfSpeed = slidePower + forwardPower;
+			lbSpeed = slidePower + forwardPower;
+			rbSpeed = -slidePower + forwardPower;
+			Timer.delay(amplitudeInSeconds);
+			slidePower = -slidePower;
+		}
+		stop();
+	}
+	
+	/**
+	 * Stops the robot's movement forward, backward, and side to side.
+	 * <p>This still leaves the heading control on.
+	 */
+	public void stop() {
+		if (getPIDController().isEnabled()) {
+			lfSpeed = 0;
+			rfSpeed = 0;
+			lbSpeed = 0;
+			rbSpeed = 0;
+		}
+		else {
+			coast();
+		}
+	}
+	
+	/**
+	 * Disables the pid controller, so the robot actually coasts on all wheels.
+	 */
+	public void coast() {
+		if (getPIDController().isEnabled()) {
+			disable();
+		}
+		lfMotor.set(0);
+		rfMotor.set(0);
+		lbMotor.set(0);
+		rbMotor.set(0);
+	}
+	
+	///////////////////////////////////////////////
+	/// Methods for Autonomous and Teleoperated ///
+	///////////////////////////////////////////////
+	
+	private void updateMotors() {
+		lfMotor.set(lfSpeed);
+		rfMotor.set(rfSpeed);
+		lbMotor.set(lbSpeed);
+		rbMotor.set(rbSpeed);
+		//System.out.println("Motor Speeds- lf: " + lfSpeed + " rf: " + rfSpeed + " lb: " + lbSpeed + " rb: " + rbSpeed);
+	}
+	
+	private double findMax(double arg1, double arg2, double arg3, double arg4) {
+		double semiMax0 = Math.max(arg1, arg2);
+		double semiMax1 = Math.max(arg3, arg4);
+		double max = Math.max(semiMax0, semiMax1);
+		return max;
+	}
+	
+	////////////////////////////
+	/// Teleoperated Methods ///
+	////////////////////////////
 	
 	/**
 	 * Drives the robot with a joystick.
@@ -103,6 +261,14 @@ public class Drivetrain extends PIDSubsystem {
 		lbSpeed -= rotateSpeed;
 		rbSpeed += rotateSpeed;
 		
+		if (lfSpeed > 1 || rfSpeed > 1 || lbSpeed > 1 || rbSpeed > 1) {
+			double maxSpeed = findMax(lfSpeed, rfSpeed, lbSpeed, rbSpeed);
+			lfSpeed /= maxSpeed;
+			rfSpeed /= maxSpeed;
+			lbSpeed /= maxSpeed;
+			rbSpeed /= maxSpeed;
+		}
+		
 		updateMotors();
 	}
 	
@@ -114,21 +280,6 @@ public class Drivetrain extends PIDSubsystem {
 		else {
 			System.out.println("The intake end is the front.");
 		}
-	}
-	
-	public void updateMotors() {
-		lfMotor.set(lfSpeed);
-		rfMotor.set(rfSpeed);
-		lbMotor.set(lbSpeed);
-		rbMotor.set(rbSpeed);
-		//System.out.println("Motor Speeds- lf: " + lfSpeed + " rf: " + rfSpeed + " lb: " + lbSpeed + " rb: " + rbSpeed);
-	}
-	
-	public void coast() {
-		lfMotor.set(0);
-		rfMotor.set(0);
-		lbMotor.set(0);
-		rbMotor.set(0);
 	}
 	
 	private double addDeadZone(double rawAxisValue) {
@@ -144,44 +295,5 @@ public class Drivetrain extends PIDSubsystem {
 			newAxisValue = 0;
 		}
 		return newAxisValue;
-	}
-	
-	public void goForward(double power, double seconds) {
-		lfMotor.set(power);
-		rfMotor.set(power);
-		lbMotor.set(power);
-		rbMotor.set(power);
-		Timer.delay(seconds);
-		coast();
-	}
-	
-	public void turnRight(double power, double seconds) {
-		lfMotor.set(power);
-		rfMotor.set(power);
-		lbMotor.set(-power);
-		rbMotor.set(-power);
-		Timer.delay(seconds);
-		coast();
-	}
-	
-	public void turnLeft(double power, double seconds) {
-		lfMotor.set(-power);
-		rfMotor.set(-power);
-		lbMotor.set(power);
-		rbMotor.set(power);
-		Timer.delay(seconds);
-		coast();
-	}
-	
-	public void wiggleForward(double slidePower, double forwardPower, double amplitudeInSeconds, int iterations) {
-		for (int i = 0; i < (iterations * 2); i++) {	
-			lfMotor.set(-slidePower + forwardPower);
-			rfMotor.set(slidePower + forwardPower);
-			lbMotor.set(slidePower + forwardPower);
-			rbMotor.set(-slidePower + forwardPower);
-			Timer.delay(amplitudeInSeconds);
-			slidePower = -slidePower;
-		}
-		coast();
 	}
 }

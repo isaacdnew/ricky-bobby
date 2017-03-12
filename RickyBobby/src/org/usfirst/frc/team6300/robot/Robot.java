@@ -41,6 +41,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
+		drivetrain.calibrateGyro();
 		commandChooser.addDefault("Deliver Gear", new DeliverGear(station));
 		commandChooser.addObject("Tune PID", new TunePID());
 		
