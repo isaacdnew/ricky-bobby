@@ -34,6 +34,7 @@ public class Robot extends IterativeRobot {
 	String station;
 	SendableChooser<Command> commandChooser = new SendableChooser<>();
 	SendableChooser<String> stationChooser = new SendableChooser<>();
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
