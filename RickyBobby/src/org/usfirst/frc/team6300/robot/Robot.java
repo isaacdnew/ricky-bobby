@@ -20,15 +20,13 @@ import org.usfirst.frc.team6300.robot.subsystems.*;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	
 	public static OI oi;
 	
-	public static Drivetrain drivetrain = new Drivetrain();
-	public static Shooter shooter = new Shooter();
-	public static Intake intake = new Intake();
-	public static Climber climber = new Climber();
-	public static Agitator agitator = new Agitator();
-	private static DeliverGear deliverGear;
+	public static final Drivetrain drivetrain = new Drivetrain();
+	public static final Shooter shooter = new Shooter();
+	public static final Intake intake = new Intake();
+	public static final Climber climber = new Climber();
+	public static final Agitator agitator = new Agitator();
 	
 	Command autonomousCommand;
 	String station;
@@ -43,6 +41,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		oi = new OI();
 		drivetrain.calibrateGyro();
+		
 		commandChooser.addDefault("Deliver Gear", new DeliverGear(station));
 		commandChooser.addObject("Tune PID", new TunePID());
 		
@@ -107,11 +106,8 @@ public class Robot extends IterativeRobot {
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
 		
-		//if (autonomousCommand != null)
-		//	autonomousCommand.cancel();
-		if (deliverGear != null) {
-			deliverGear.cancel();
-		}
+		if (autonomousCommand != null)
+			autonomousCommand.cancel();
 	}
 
 	/**

@@ -8,29 +8,29 @@ package org.usfirst.frc.team6300.robot;
  */
 public class RobotMap {	
 	//drivetrain
-	public static int lfMotor = 3;
-	public static int rfMotor = 2;
-	public static int lbMotor = 0;
-	public static int rbMotor = 1;
+	public static final int lfMotor = 3;
+	public static final int rfMotor = 2;
+	public static final int lbMotor = 0;
+	public static final int rbMotor = 1;
 	
-	public static boolean lfInverted = false;
-	public static boolean rfInverted = true;
-	public static boolean lbInverted = false;
-	public static boolean rbInverted = true;
+	public static final boolean lfInverted = false;
+	public static final boolean rfInverted = true;
+	public static final boolean lbInverted = false;
+	public static final boolean rbInverted = true;
 	
 	//shooter
-	public static int flyMotor = 6;
-	public static boolean flyInverted = false;
+	public static final int flyMotor = 6;
+	public static final boolean flyInverted = false;
 	
 	//intake
-	public static int intakeMotor = 4;
-	public static boolean intakeInverted = true;
+	public static final int intakeMotor = 4;
+	public static final boolean intakeInverted = true;
 	
 	//climber
-	public static int climberMotor = 5;
-	public static boolean climberInverted = true;
+	public static final int climberMotor = 5;
+	public static final boolean climberInverted = true;
 	
 	//agitator controller
-	public static int agitatorMotor = 7;
-	public static boolean agitatorInverted = false;
+	public static final int agitatorMotor = 7;
+	public static final boolean agitatorInverted = false;
 }

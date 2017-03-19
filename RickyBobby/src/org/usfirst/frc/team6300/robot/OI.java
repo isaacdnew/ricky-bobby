@@ -13,29 +13,31 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	//generic joystick mappings
-	public static int leftXAxis = 0;
-	public static int leftYAxis = 1;
-	public static int leftTrigger = 2;
-	public static int rightTrigger = 3;
-	public static int rightXAxis = 4;
-	public static int rightYAxis = 5;
+	//generic joystick axes
+	public static final int leftXAxis = 0;
+	public static final int leftYAxis = 1;
+	public static final int leftTrigger = 2;
+	public static final int rightTrigger = 3;
+	public static final int rightXAxis = 4;
+	public static final int rightYAxis = 5;
 	
-	public static int a = 1;
-	public static int b = 2;
-	public static int x = 3;
-	public static int y = 4;
-	public static int lTrigButton = 5;
-	public static int rTrigButton = 6;
+	//generic joystick buttons
+	public static final int a = 1;
+	public static final int b = 2;
+	public static final int x = 3;
+	public static final int y = 4;
+	public static final int lTrigButton = 5;
+	public static final int rTrigButton = 6;
 	
-	public static Joystick gamepadDr = new Joystick(0);
-	public static Button drButtonA = new JoystickButton(gamepadDr, a);
+	//create joysticks
+	public static final Joystick gamepadDr = new Joystick(0);
+	public static final Button drButtonA = new JoystickButton(gamepadDr, a);
 	
-	public static Joystick gamepadSh = new Joystick(1);
-	public static Button shButtonA = new JoystickButton(gamepadSh, a);
-	public static Button shButtonB = new JoystickButton(gamepadSh, b);
-	public static Button shButtonX = new JoystickButton(gamepadSh, x);
-	public static Button shButtonY = new JoystickButton(gamepadSh, y);
+	public static final Joystick gamepadSh = new Joystick(1);
+	public static final Button shButtonA = new JoystickButton(gamepadSh, a);
+	public static final Button shButtonB = new JoystickButton(gamepadSh, b);
+	public static final Button shButtonX = new JoystickButton(gamepadSh, x);
+	public static final Button shButtonY = new JoystickButton(gamepadSh, y);
 	
 	public OI() {
 		shButtonB.whenReleased(new TeleAgitator('b'));
