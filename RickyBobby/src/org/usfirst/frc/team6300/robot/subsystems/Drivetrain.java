@@ -140,7 +140,11 @@ public class Drivetrain extends PIDSubsystem {
 		if (!getPIDController().isEnabled()) {
 			enable();
 		}
-		setSetpoint(getSetpoint() + degrees);
+		
+		double newSetpoint = getPIDController().getSetpoint() + degrees;
+		newSetpoint -= 360 * Math.floor(newSetpoint/360);
+		getPIDController().setSetpoint(newSetpoint);
+		
 		while (!getPIDController().onTarget()) {
 			Timer.delay(0.1);
 		}
@@ -160,7 +164,7 @@ public class Drivetrain extends PIDSubsystem {
 		if (!getPIDController().isEnabled()) {
 			enable();
 		}
-		setSetpoint(getSetpoint() - degrees);
+		getPIDController().setSetpoint(getPIDController().getSetpoint() + degrees);
 		while (!getPIDController().onTarget()) {
 			Timer.delay(0.1);
 		}

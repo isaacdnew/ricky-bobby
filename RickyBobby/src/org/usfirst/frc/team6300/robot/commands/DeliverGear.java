@@ -4,7 +4,7 @@ import org.usfirst.frc.team6300.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -73,7 +73,7 @@ public class DeliverGear extends Command {
 		Robot.drivetrain.enable();
 		Robot.drivetrain.goForward(-0.3, 1.2);
 		Timer.delay(0.5);
-		Robot.drivetrain.turnLeft(45);
+		Robot.drivetrain.turnRight(-45);
 		Robot.drivetrain.goForward(-0.3, 0.8);
 	}
 }
