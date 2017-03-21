@@ -30,8 +30,8 @@ public class Robot extends IterativeRobot {
 	
 	Command autonomousCommand;
 	String station;
-	SendableChooser<Command> commandChooser = new SendableChooser<>();
-	SendableChooser<String> stationChooser = new SendableChooser<>();
+	private static final SendableChooser<Command> commandChooser = new SendableChooser<>();
+	public static final SendableChooser<String> stationChooser = new SendableChooser<>();
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -40,9 +40,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		drivetrain.calibrateGyro();
 		
-		commandChooser.addDefault("Deliver Gear", new DeliverGear(station));
+		commandChooser.addDefault("Deliver Gear", new DeliverGear());
 		commandChooser.addObject("Tune PID", new TunePID());
 		
 		stationChooser.addObject("Left Alliance Station", "left");
@@ -53,6 +52,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
 		//CameraServer.getInstance().startAutomaticCapture("Climber Camera", 1);
 		//CameraServer.getInstance().startAutomaticCapture("Gear Camera", 0);
+		
+		drivetrain.calibrateGyro();
 	}
 	
 	/**
@@ -69,24 +70,10 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 	}
 	
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString code to get the auto name from the text box below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings & commands.
-	 */
 	@Override
 	public void autonomousInit() {
 		autonomousCommand = commandChooser.getSelected();
-		if (autonomousCommand == new DeliverGear(station)) {
-			station = stationChooser.getSelected();
-		}
-		// schedule the autonomous command (example)
+		
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 	}
@@ -101,11 +88,6 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
-		
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 	}

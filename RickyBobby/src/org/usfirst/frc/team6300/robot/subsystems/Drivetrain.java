@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The drivetrain, consisting of four drive motors.
@@ -37,7 +38,7 @@ public class Drivetrain extends PIDSubsystem {
 	boolean gearIsFront = true;
 	
 	public Drivetrain() {
-		super(0.01, 0.0, 0.0, 0.0);
+		super(0.05, 0.0, 0.0);
 		gyro = new ADXRS450_Gyro();
 		getPIDController().setOutputRange(-1, 1);
 		getPIDController().setPercentTolerance(2);
@@ -64,6 +65,10 @@ public class Drivetrain extends PIDSubsystem {
 		return angle;
 	}
 	
+	public double getHeading() {
+		return returnPIDInput();
+	}
+	
 	protected void usePIDOutput(double output) {
 		lfOutput = output;
 		rfOutput = -output;
@@ -87,6 +92,8 @@ public class Drivetrain extends PIDSubsystem {
 		rfMotor.set(rfOutput);
 		lbMotor.set(lbOutput);
 		rbMotor.set(rbOutput);
+		
+		SmartDashboard.putNumber("Heading", gyro.getAngle());
 	}
 	
 	@Override
@@ -98,9 +105,17 @@ public class Drivetrain extends PIDSubsystem {
 		rbOutput = 0;
 	}
 	
+	@Override
+	public void enable() {
+		gyro.reset();
+		super.enable();
+	}
+	
 	public void calibrateGyro() {
 		disable();
+		System.out.println("Calibrating the gyro....");
 		gyro.calibrate();
+		System.out.println("Done calibrating the gyro.");
 	}
 	
 	public void goForward(double power, double seconds) {
