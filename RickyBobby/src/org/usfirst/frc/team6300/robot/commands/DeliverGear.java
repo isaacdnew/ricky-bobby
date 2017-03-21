@@ -10,16 +10,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class DeliverGear extends Command {
-	private String station = "center";
+	private String station;
 	
 	public DeliverGear() {
 		requires(Robot.drivetrain);
-		station = Robot.stationChooser.getSelected();
 	}
 	
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
+		station = Robot.stationChooser.getSelected();
 		switch (station) {
 		case "left": {
 			deliverFromLeft();
@@ -38,7 +38,6 @@ public class DeliverGear extends Command {
 	
 	@Override
 	protected void execute() {
-		SmartDashboard.putNumber("Heading", Robot.drivetrain.getHeading());
 	}
 	
 	@Override

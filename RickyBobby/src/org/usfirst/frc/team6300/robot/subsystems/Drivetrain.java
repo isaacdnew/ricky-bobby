@@ -38,7 +38,7 @@ public class Drivetrain extends PIDSubsystem {
 	boolean gearIsFront = true;
 	
 	public Drivetrain() {
-		super(0.05, 0.0, 0.0);
+		super(0.03, 0.0008, 0.03);
 		gyro = new ADXRS450_Gyro();
 		getPIDController().setOutputRange(-1, 1);
 		getPIDController().setPercentTolerance(2);
@@ -70,10 +70,10 @@ public class Drivetrain extends PIDSubsystem {
 	}
 	
 	protected void usePIDOutput(double output) {
-		lfOutput = output;
-		rfOutput = -output;
-		lbOutput = output;
-		rbOutput = -output;
+		lfOutput = -output;
+		rfOutput = output;
+		lbOutput = -output;
+		rbOutput = output;
 		
 		lfOutput += lfSpeed;
 		rfOutput += rfSpeed;
@@ -108,6 +108,7 @@ public class Drivetrain extends PIDSubsystem {
 	@Override
 	public void enable() {
 		gyro.reset();
+		setSetpoint(0);
 		super.enable();
 	}
 	
@@ -140,6 +141,10 @@ public class Drivetrain extends PIDSubsystem {
 			enable();
 		}
 		setSetpoint(getSetpoint() + degrees);
+		while (!getPIDController().onTarget()) {
+			Timer.delay(0.1);
+		}
+		stop();
 	}
 	
 	public void turnRight(double power, double seconds) {
@@ -147,6 +152,8 @@ public class Drivetrain extends PIDSubsystem {
 		rfMotor.set(-power);
 		lbMotor.set(power);
 		rbMotor.set(-power);
+		Timer.delay(seconds);
+		coast();
 	}
 	
 	public void turnLeft(double degrees) {
@@ -154,6 +161,10 @@ public class Drivetrain extends PIDSubsystem {
 			enable();
 		}
 		setSetpoint(getSetpoint() - degrees);
+		while (!getPIDController().onTarget()) {
+			Timer.delay(0.1);
+		}
+		stop();
 	}
 	
 	public void turnLeft(double power, double seconds) {
@@ -161,6 +172,7 @@ public class Drivetrain extends PIDSubsystem {
 		rfMotor.set(power);
 		lbMotor.set(-power);
 		rbMotor.set(power);
+		Timer.delay(seconds);
 	}
 	
 	public void wiggleForward(double slidePower, double forwardPower, double amplitudeInSeconds, int iterations) {
@@ -255,22 +267,22 @@ public class Drivetrain extends PIDSubsystem {
 		}
 		
 		//forward
-		double forwardSpeed = addDeadZone(joy.getRawAxis(forwardAxis));
+		double forwardSpeed = addDeadZone(joy.getRawAxis(forwardAxis)) * power;
 		
-		lfSpeed = forwardSpeed * power;
-		rfSpeed = forwardSpeed * power;
-		lbSpeed = forwardSpeed * power;
-		rbSpeed = forwardSpeed * power;
+		lfSpeed = forwardSpeed;
+		rfSpeed = forwardSpeed;
+		lbSpeed = forwardSpeed;
+		rbSpeed = forwardSpeed;
 		
 		//slide
-		double slideSpeed = addDeadZone(joy.getRawAxis(slideAxis));
-		lfSpeed -= slideSpeed * power;
-		rfSpeed += slideSpeed * power;
-		lbSpeed += slideSpeed * power;
-		rbSpeed -= slideSpeed * power;
+		double slideSpeed = addDeadZone(joy.getRawAxis(slideAxis)) * power;
+		lfSpeed -= slideSpeed;
+		rfSpeed += slideSpeed;
+		lbSpeed += slideSpeed;
+		rbSpeed -= slideSpeed;
 		
 		//rotate
-		double rotateSpeed = addDeadZone(joy.getRawAxis(rotateAxis)) / 3;
+		double rotateSpeed = addDeadZone(joy.getRawAxis(rotateAxis)) / 2;
 		lfSpeed -= rotateSpeed;
 		rfSpeed += rotateSpeed;
 		lbSpeed -= rotateSpeed;

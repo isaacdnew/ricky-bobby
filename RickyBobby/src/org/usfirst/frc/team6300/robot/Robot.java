@@ -29,7 +29,6 @@ public class Robot extends IterativeRobot {
 	public static final Agitator agitator = new Agitator();
 	
 	Command autonomousCommand;
-	String station;
 	private static final SendableChooser<Command> commandChooser = new SendableChooser<>();
 	public static final SendableChooser<String> stationChooser = new SendableChooser<>();
 	
@@ -44,16 +43,14 @@ public class Robot extends IterativeRobot {
 		commandChooser.addDefault("Deliver Gear", new DeliverGear());
 		commandChooser.addObject("Tune PID", new TunePID());
 		
-		stationChooser.addObject("Left Alliance Station", "left");
 		stationChooser.addDefault("Center Alliance Station", "center");
+		stationChooser.addObject("Left Alliance Station", "left");
 		stationChooser.addObject("Right Alliance Station", "right");
 		
 		SmartDashboard.putData("Auto Command Chooser", commandChooser);
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
 		//CameraServer.getInstance().startAutomaticCapture("Climber Camera", 1);
 		//CameraServer.getInstance().startAutomaticCapture("Gear Camera", 0);
-		
-		drivetrain.calibrateGyro();
 	}
 	
 	/**
@@ -73,6 +70,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		autonomousCommand = commandChooser.getSelected();
+		drivetrain.calibrateGyro();
 		
 		if (autonomousCommand != null)
 			autonomousCommand.start();

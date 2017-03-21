@@ -24,6 +24,7 @@ public class TunePID extends Command {
     @Override
     protected void execute() {
     	SmartDashboard.putNumber("Heading", Robot.drivetrain.getHeading());
+    	SmartDashboard.putNumber("Setpoint", Robot.drivetrain.getSetpoint());
     }
     
     @Override
