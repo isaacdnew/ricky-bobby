@@ -57,8 +57,11 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto Command Chooser", commandChooser);
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
 		
-		//CameraServer.getInstance().startAutomaticCapture("Climber Camera", 1);
-		new Thread(() -> {
+		gearCam = new UsbCamera("Gear Camera", 0);
+		gearCam.setResolution(320, 240);
+		gearCam.setFPS(20);
+		CameraServer.getInstance().startAutomaticCapture(gearCam);
+		/*new Thread(() -> {
 			gearCam = new UsbCamera("Gear Camera", 0);
 			//gearCam.setResolution(160, 120);
 			gearCam.setFPS(20);
@@ -77,7 +80,7 @@ public class Robot extends IterativeRobot {
 					break;
 				}
 			}
-		}).start();
+		}).start();*/
 		
 		drivetrain.calibrateGyro();
 	}

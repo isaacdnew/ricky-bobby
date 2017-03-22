@@ -60,7 +60,7 @@ public class DeliverGear extends Command {
 		Robot.drivetrain.goForward(-0.3, 1.75);
 		Timer.delay(0.5);
 		Robot.drivetrain.turnRight(60);
-		//Robot.drivetrain.goForward(-0.3, 0.8);
+		Robot.drivetrain.goForward(-0.2, 4);
 		//Robot.drivetrain.goForward(-0.2, 10);
 	}
 	
@@ -76,7 +76,7 @@ public class DeliverGear extends Command {
 		Robot.drivetrain.goForward(-0.3, 1.75);
 		Timer.delay(0.5);
 		Robot.drivetrain.turnRight(-60);
-		//Robot.drivetrain.goForward(-0.3, 0.8);
+		Robot.drivetrain.goForward(-0.2, 4);
 		//Robot.drivetrain.goForward(-0.2, 10);
 	}
 }
