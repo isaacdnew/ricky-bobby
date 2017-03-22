@@ -1,8 +1,8 @@
 
 package org.usfirst.frc.team6300.robot;
 
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
+//import edu.wpi.cscore.CvSink;
+//import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
+//import org.opencv.core.Mat;
+//import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team6300.robot.commands.*;
 import org.usfirst.frc.team6300.robot.subsystems.*;
 
