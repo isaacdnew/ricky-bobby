@@ -78,6 +78,8 @@ public class Robot extends IterativeRobot {
 				}
 			}
 		}).start();
+		
+		drivetrain.calibrateGyro();
 	}
 	
 	/**
@@ -97,8 +99,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		autonomousCommand = commandChooser.getSelected();
-		drivetrain.calibrateGyro();
-		
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 	}

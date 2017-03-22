@@ -47,33 +47,36 @@ public class DeliverGear extends Command {
 	
 	@Override
 	protected void end() {
+		Robot.drivetrain.disable();
 	}
 	
 	@Override
 	protected void interrupted() {
+		Robot.drivetrain.disable();
 	}
 	
 	private void deliverFromLeft() {
 		Robot.drivetrain.enable();
-		Robot.drivetrain.goForward(-0.3, 1.2);
+		Robot.drivetrain.goForward(-0.3, 1.75);
 		Timer.delay(0.5);
-		Robot.drivetrain.turnRight(45);
-		Robot.drivetrain.goForward(-0.3, 0.8);
+		Robot.drivetrain.turnRight(60);
+		//Robot.drivetrain.goForward(-0.3, 0.8);
+		//Robot.drivetrain.goForward(-0.2, 10);
 	}
 	
 	private void deliverFromCenter() {
 		Robot.drivetrain.enable();
-		Robot.drivetrain.goForward(-0.3, 1);
-		Robot.drivetrain.goForward(-0.2, 10);
-		//Timer.delay(0.5);
-		//Robot.drivetrain.wiggleForward(0.2, 0.05, 0.3, 4);
+		Robot.drivetrain.goForward(-0.3, 1.75);
+		//Robot.drivetrain.goForward(-0.3, 1);
+		//Robot.drivetrain.goForward(-0.2, 10);
 	}
 	
 	private void deliverFromRight() {
 		Robot.drivetrain.enable();
-		Robot.drivetrain.goForward(-0.3, 1.2);
+		Robot.drivetrain.goForward(-0.3, 1.75);
 		Timer.delay(0.5);
-		Robot.drivetrain.turnRight(-45);
-		Robot.drivetrain.goForward(-0.3, 0.8);
+		Robot.drivetrain.turnRight(-60);
+		//Robot.drivetrain.goForward(-0.3, 0.8);
+		//Robot.drivetrain.goForward(-0.2, 10);
 	}
 }

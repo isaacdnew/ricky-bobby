@@ -38,10 +38,10 @@ public class Drivetrain extends PIDSubsystem {
 	boolean gearIsFront = true;
 	
 	public Drivetrain() {
-		super(0.03, 0.0008, 0.03);
+		super(0.03, 0.003, 0.07);
 		gyro = new ADXRS450_Gyro();
-		getPIDController().setOutputRange(-1, 1);
-		getPIDController().setPercentTolerance(2);
+		getPIDController().setOutputRange(-0.4, 0.4);
+		getPIDController().setAbsoluteTolerance(0.5);
 		getPIDController().setContinuous(true);
 		getPIDController().setInputRange(0, 360);
 		
@@ -103,6 +103,11 @@ public class Drivetrain extends PIDSubsystem {
 		rfOutput = 0;
 		lbOutput = 0;
 		rbOutput = 0;
+		
+		lfSpeed = 0;
+		rfSpeed = 0;
+		lbSpeed = 0;
+		rbSpeed = 0;
 	}
 	
 	@Override
@@ -116,6 +121,7 @@ public class Drivetrain extends PIDSubsystem {
 		disable();
 		System.out.println("Calibrating the gyro....");
 		gyro.calibrate();
+		setSetpoint(0);
 		System.out.println("Done calibrating the gyro.");
 	}
 	
