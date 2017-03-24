@@ -60,6 +60,7 @@ public class Robot extends IterativeRobot {
 		gearCam = new UsbCamera("Gear Camera", 0);
 		gearCam.setResolution(320, 240);
 		gearCam.setFPS(20);
+		gearCam.setBrightness(24);
 		CameraServer.getInstance().startAutomaticCapture(gearCam);
 		/*new Thread(() -> {
 			gearCam = new UsbCamera("Gear Camera", 0);
