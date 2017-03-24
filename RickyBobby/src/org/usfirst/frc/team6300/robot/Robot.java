@@ -50,9 +50,11 @@ public class Robot extends IterativeRobot {
 		commandChooser.addDefault("Deliver Gear", new DeliverGear());
 		commandChooser.addObject("Tune PID", new TunePID());
 		
-		stationChooser.addDefault("Center Alliance Station", "center");
-		stationChooser.addObject("Left Alliance Station", "left");
-		stationChooser.addObject("Right Alliance Station", "right");
+		stationChooser.addDefault("Center", "center");
+		stationChooser.addObject("Left Red", "leftRed");
+		stationChooser.addObject("Left Blue", "leftBlue");
+		stationChooser.addObject("Right Red", "rightRed");
+		stationChooser.addObject("Right Blue", "rightBlue");
 		
 		SmartDashboard.putData("Auto Command Chooser", commandChooser);
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
