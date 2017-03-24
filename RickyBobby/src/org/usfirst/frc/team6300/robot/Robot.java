@@ -58,7 +58,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
 		
 		gearCam = new UsbCamera("Gear Camera", 0);
-		gearCam.setResolution(320, 240);
+		gearCam.setResolution(160, 120);
 		gearCam.setFPS(20);
 		gearCam.setBrightness(24);
 		CameraServer.getInstance().startAutomaticCapture(gearCam);
