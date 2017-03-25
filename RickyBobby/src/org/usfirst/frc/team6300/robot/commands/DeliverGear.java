@@ -21,19 +21,55 @@ public class DeliverGear extends Command {
 	protected void initialize() {
 		station = Robot.stationChooser.getSelected();
 		switch (station) {
-		case "left": {
-			deliverFromLeft();
-			break;
-		}
 		case "center": {
-			deliverFromCenter();
+			Robot.drivetrain.enable();
+			Robot.drivetrain.goForward(-0.3, 1.6);
+			Robot.drivetrain.goForward(0.1, 10);
 			break;
 		}
-		case "right": {
-			deliverFromRight();
+		case "leftRed": {
+			leftRedOrRightBlue(true);
+			break;
+		}
+		case "leftBlue": {
+			leftBlueOrRightRed(false);
+			break;
+		}
+		case "rightRed": {
+			leftBlueOrRightRed(true);
+			break;
+		}
+		case "rightBlue": {
+			leftRedOrRightBlue(false);
 			break;
 		}
 		}
+	}
+	
+	private void leftRedOrRightBlue(boolean isRed) {
+		Robot.drivetrain.enable();
+		Robot.drivetrain.goForward(-0.3, 1.27);
+		Timer.delay(0.5);
+		if (isRed) {
+			Robot.drivetrain.turnRight(60);
+		}
+		else {
+			Robot.drivetrain.turnRight(-60);
+		}
+		Robot.drivetrain.goForward(-0.2, 2.1);
+	}
+	
+	private void leftBlueOrRightRed(boolean isRed) {
+		Robot.drivetrain.enable();
+		Robot.drivetrain.goForward(-0.3, 1.2);
+		Timer.delay(0.5);
+		if (isRed) {
+			Robot.drivetrain.turnRight(-60);
+		}
+		else {
+			Robot.drivetrain.turnRight(60);
+		}
+		Robot.drivetrain.goForward(-0.2, 2.8);
 	}
 	
 	@Override
@@ -53,30 +89,5 @@ public class DeliverGear extends Command {
 	@Override
 	protected void interrupted() {
 		Robot.drivetrain.disable();
-	}
-	
-	private void deliverFromLeft() {
-		Robot.drivetrain.enable();
-		Robot.drivetrain.goForward(-0.3, 1.55);
-		Timer.delay(0.5);
-		Robot.drivetrain.turnRight(60);
-		Robot.drivetrain.goForward(-0.2, 2.1);
-		//Robot.drivetrain.goForward(-0.2, 10);
-	}
-	
-	private void deliverFromCenter() {
-		Robot.drivetrain.enable();
-		Robot.drivetrain.goForward(-0.3, 1.6);
-		//Robot.drivetrain.goForward(-0.3, 1);
-		//Robot.drivetrain.goForward(-0.2, 10);
-	}
-	
-	private void deliverFromRight() {
-		Robot.drivetrain.enable();
-		Robot.drivetrain.goForward(-0.3, 1.55);
-		Timer.delay(0.5);
-		Robot.drivetrain.turnRight(-60);
-		Robot.drivetrain.goForward(-0.2, 2.1);
-		//Robot.drivetrain.goForward(-0.2, 10);
 	}
 }
