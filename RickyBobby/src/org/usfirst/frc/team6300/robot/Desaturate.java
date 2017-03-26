@@ -1,5 +1,8 @@
 package org.usfirst.frc.team6300.robot;
 
+import edu.wpi.cscore.CvSource;
+import edu.wpi.first.wpilibj.CameraServer;
+
 //import java.io.File;
 //import java.io.FileWriter;
 //import java.io.IOException;
@@ -26,7 +29,9 @@ import org.opencv.imgproc.*;
 * @author GRIP
 */
 public class Desaturate implements VisionPipeline {
-
+	
+	CvSource outputStream = CameraServer.getInstance().putVideo("GearCam B&W", 640, 480);
+	
 	//Outputs
 	private Mat desaturateOutput = new Mat();
 
@@ -41,7 +46,7 @@ public class Desaturate implements VisionPipeline {
 		// Step Desaturate0:
 		Mat desaturateInput = source0;
 		desaturate(desaturateInput, desaturateOutput);
-
+		outputStream.putFrame(desaturateOutput);
 	}
 
 	/**

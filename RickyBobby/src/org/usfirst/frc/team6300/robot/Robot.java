@@ -1,8 +1,7 @@
-
 package org.usfirst.frc.team6300.robot;
 
 //import edu.wpi.cscore.CvSink;
-//import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -11,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.VisionThread;
 
 //import org.opencv.core.Mat;
 //import org.opencv.imgproc.Imgproc;
@@ -38,7 +38,11 @@ public class Robot extends IterativeRobot {
 	public static final SendableChooser<String> stationChooser = new SendableChooser<>();
 	public static final SendableChooser<Boolean> colorChooser = new SendableChooser<>();
 	
+	private static final int imgWidth = 320;
+	private static final int imgHeight = 240;
+	
 	private static UsbCamera gearCam;
+	private VisionThread visionThread;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -63,12 +67,12 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
 		SmartDashboard.putData("Alliance Color Chooser", colorChooser);
 		
-		gearCam = new UsbCamera("Gear Camera", 0);
+		//gearCam = new UsbCamera("Gear Camera", 0);
 		//CameraServer.getInstance().startAutomaticCapture(gearCam);
-		gearCam.setResolution(160, 120);
-		gearCam.setFPS(20);
-		gearCam.setBrightness(25);
-		CameraServer.getInstance().startAutomaticCapture(gearCam);
+		//gearCam.setResolution(160, 120);
+		//gearCam.setFPS(20);
+		//gearCam.setBrightness(25);
+		//CameraServer.getInstance().startAutomaticCapture(gearCam);
 		
 		/*new Thread(() -> {
 			gearCam = new UsbCamera("Gear Camera", 0);
@@ -91,7 +95,18 @@ public class Robot extends IterativeRobot {
 			}
 		}).start();*/
 		
+		//TODO test this vision thread
+		CvSource outputStream = CameraServer.getInstance().putVideo("GearCam B&W", imgWidth, imgHeight);
+		visionThread = new VisionThread(gearCam, new Desaturate(), pipeline -> {
+			outputStream.putFrame(pipeline.desaturateOutput());
+	    });
+	    visionThread.start();
+		
 		drivetrain.calibrateGyro();
+	}
+	
+	@Override
+	public void robotPeriodic() {
 	}
 	
 	/**
@@ -99,6 +114,7 @@ public class Robot extends IterativeRobot {
 	 * You can use it to reset any subsystem information you want to clear when
 	 * the robot is disabled.
 	 */
+	
 	@Override
 	public void disabledInit() {
 	}
