@@ -36,6 +36,7 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	private static final SendableChooser<Command> commandChooser = new SendableChooser<>();
 	public static final SendableChooser<String> stationChooser = new SendableChooser<>();
+	public static final SendableChooser<Boolean> colorChooser = new SendableChooser<>();
 	
 	private static UsbCamera gearCam;
 	
@@ -49,15 +50,18 @@ public class Robot extends IterativeRobot {
 		
 		commandChooser.addDefault("Deliver Gear", new DeliverGear());
 		commandChooser.addObject("Tune PID", new TunePID());
+		commandChooser.addObject("Shoot Low Goals", new LowGoal());
 		
 		stationChooser.addDefault("Center", "center");
-		stationChooser.addObject("Left Red", "leftRed");
-		stationChooser.addObject("Left Blue", "leftBlue");
-		stationChooser.addObject("Right Red", "rightRed");
-		stationChooser.addObject("Right Blue", "rightBlue");
+		stationChooser.addObject("Left", "left");
+		stationChooser.addObject("Right", "right");
+		
+		colorChooser.addDefault("Red", true);
+		colorChooser.addObject("Blue", false);
 		
 		SmartDashboard.putData("Auto Command Chooser", commandChooser);
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
+		SmartDashboard.putData("Alliance Color Chooser", colorChooser);
 		
 		gearCam = new UsbCamera("Gear Camera", 0);
 		//CameraServer.getInstance().startAutomaticCapture(gearCam);
