@@ -19,11 +19,12 @@ public class DeliverGear extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
+		Robot.drivetrain.getPIDController().setOutputRange(-0.4, 0.4);
 		station = Robot.stationChooser.getSelected();
 		switch (station) {
 		case "center": {
 			Robot.drivetrain.enable();
-			Robot.drivetrain.goForward(-0.3, 1.6);
+			Robot.drivetrain.goForward(0.3, 1.6);
 			Robot.drivetrain.goForward(0.1, 10);
 			break;
 		}
@@ -48,7 +49,7 @@ public class DeliverGear extends Command {
 	
 	private void leftRedOrRightBlue(boolean isRed) {
 		Robot.drivetrain.enable();
-		Robot.drivetrain.goForward(-0.3, 1.27);
+		Robot.drivetrain.goForward(0.3, 1.27);
 		Timer.delay(0.5);
 		if (isRed) {
 			Robot.drivetrain.turnRight(60);
@@ -56,12 +57,12 @@ public class DeliverGear extends Command {
 		else {
 			Robot.drivetrain.turnRight(-60);
 		}
-		Robot.drivetrain.goForward(-0.2, 2.1);
+		Robot.drivetrain.goForward(0.2, 2.1);
 	}
 	
 	private void leftBlueOrRightRed(boolean isRed) {
 		Robot.drivetrain.enable();
-		Robot.drivetrain.goForward(-0.3, 1.2);
+		Robot.drivetrain.goForward(0.3, 1.2);
 		Timer.delay(0.5);
 		if (isRed) {
 			Robot.drivetrain.turnRight(-60);
@@ -69,7 +70,7 @@ public class DeliverGear extends Command {
 		else {
 			Robot.drivetrain.turnRight(60);
 		}
-		Robot.drivetrain.goForward(-0.2, 2.8);
+		Robot.drivetrain.goForward(0.2, 2.8);
 	}
 	
 	@Override

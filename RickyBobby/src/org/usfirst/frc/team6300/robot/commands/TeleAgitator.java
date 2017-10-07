@@ -35,7 +35,7 @@ public class TeleAgitator extends Command {
     			Robot.agitator.stop();
     		}
     		else {
-    			Robot.agitator.spinUp(-1);
+    			Robot.agitator.spinUp(1);
     		}
     	}
     	else if (button == 'y') {
@@ -43,7 +43,7 @@ public class TeleAgitator extends Command {
     			Robot.agitator.stop();
     		}
     		else {
-    			Robot.agitator.spinUp(1);
+    			Robot.agitator.spinUp(-1);
     		}
     	}
     }

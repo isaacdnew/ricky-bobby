@@ -38,9 +38,8 @@ public class Drivetrain extends PIDSubsystem {
 	boolean gearIsFront = true;
 	
 	public Drivetrain() {
-		super(0.03, 0.003, 0.07);
+		super(0.04, 0.003, 0.1);
 		gyro = new ADXRS450_Gyro();
-		getPIDController().setOutputRange(-0.4, 0.4);
 		getPIDController().setAbsoluteTolerance(0.5);
 		getPIDController().setContinuous(true);
 		getPIDController().setInputRange(0, 360);
@@ -55,9 +54,18 @@ public class Drivetrain extends PIDSubsystem {
 		setDefaultCommand(new MecanumDrive());
 	}
 	
-	//////////////////////////
-	/// Autonomous Methods ///
-	//////////////////////////
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*-------------*/
+	/* PID Methods */
+	/*-------------*/
 	
 	protected double returnPIDInput() {
 		double angle = gyro.getAngle();
@@ -108,6 +116,7 @@ public class Drivetrain extends PIDSubsystem {
 		rfSpeed = 0;
 		lbSpeed = 0;
 		rbSpeed = 0;
+		setSetpoint(0);
 	}
 	
 	@Override
@@ -124,6 +133,21 @@ public class Drivetrain extends PIDSubsystem {
 		setSetpoint(0);
 		System.out.println("Done calibrating the gyro.");
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*--------------------*/
+	/* Autonomous Methods */
+	/*--------------------*/
 	
 	public void goForward(double power, double seconds) {
 		if (getPIDController().isEnabled()) {
@@ -146,43 +170,23 @@ public class Drivetrain extends PIDSubsystem {
 		if (!getPIDController().isEnabled()) {
 			enable();
 		}
+		setSetpoint(getSetpoint() + degrees);
 		
-		double newSetpoint = getPIDController().getSetpoint() + degrees;
-		newSetpoint -= 360 * Math.floor(newSetpoint/360);
-		getPIDController().setSetpoint(newSetpoint);
-		
-		while (!getPIDController().onTarget()) {
+		while (!onTarget()) {
 			Timer.delay(0.1);
 		}
 		stop();
-	}
-	
-	public void turnRight(double power, double seconds) {
-		lfMotor.set(power);
-		rfMotor.set(-power);
-		lbMotor.set(power);
-		rbMotor.set(-power);
-		Timer.delay(seconds);
-		coast();
 	}
 	
 	public void turnLeft(double degrees) {
 		if (!getPIDController().isEnabled()) {
 			enable();
 		}
-		getPIDController().setSetpoint(getPIDController().getSetpoint() + degrees);
+		setSetpoint(getSetpoint() + degrees);
 		while (!getPIDController().onTarget()) {
 			Timer.delay(0.1);
 		}
 		stop();
-	}
-	
-	public void turnLeft(double power, double seconds) {
-		lfMotor.set(-power);
-		rfMotor.set(power);
-		lbMotor.set(-power);
-		rbMotor.set(power);
-		Timer.delay(seconds);
 	}
 	
 	public void wiggleForward(double slidePower, double forwardPower, double amplitudeInSeconds, int iterations) {
@@ -199,6 +203,24 @@ public class Drivetrain extends PIDSubsystem {
 		}
 		stop();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*-------------------------*/
+	/* General Control Methods */
+	/*-------------------------*/
 	
 	/**
 	 * Stops the robot's movement forward, backward, and side to side.
@@ -229,10 +251,6 @@ public class Drivetrain extends PIDSubsystem {
 		rbMotor.set(0);
 	}
 	
-	///////////////////////////////////////////////
-	/// Methods for Autonomous and Teleoperated ///
-	///////////////////////////////////////////////
-	
 	private void updateMotors() {
 		lfMotor.set(lfSpeed);
 		rfMotor.set(rfSpeed);
@@ -241,19 +259,45 @@ public class Drivetrain extends PIDSubsystem {
 		//System.out.println("Motor Speeds- lf: " + lfSpeed + " rf: " + rfSpeed + " lb: " + lbSpeed + " rb: " + rbSpeed);
 	}
 	
-	private double findMax(double arg1, double arg2, double arg3, double arg4) {
-		double semiMax0 = Math.max(arg1, arg2);
-		double semiMax1 = Math.max(arg3, arg4);
+	private double findMax(double arg0, double arg1, double arg2, double arg3) {
+		double semiMax0 = Math.max(arg0, arg1);
+		double semiMax1 = Math.max(arg2, arg3);
 		double max = Math.max(semiMax0, semiMax1);
 		return max;
 	}
 	
-	////////////////////////////
-	/// Teleoperated Methods ///
-	////////////////////////////
+	private double addDeadZone(double rawAxisValue) {
+		double newAxisValue;
+		double deadZoneRadius = 0.2;
+		if (deadZoneRadius < rawAxisValue) {
+			newAxisValue = rawAxisValue - deadZoneRadius;
+		}
+		else if (rawAxisValue < -deadZoneRadius) {
+			newAxisValue = rawAxisValue + deadZoneRadius;
+		}
+		else {
+			newAxisValue = 0;
+		}
+		return newAxisValue;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*----------------*/
+	/* Teleop Methods */
+	/*----------------*/
 	
 	/**
-	 * Drives the robot with a joystick.
+	 * Drives the robot with a joystick, without using the gyro.
 	 * @param joy The joystick to use
 	 * @param forwardAxis The axis that, when positive, moves the robot forward
 	 * @param slideAxis The axis that, when positive, slides the robot to its right
@@ -309,6 +353,63 @@ public class Drivetrain extends PIDSubsystem {
 		updateMotors();
 	}
 	
+	/**
+	 * Drives the robot with a joystick, and controls the heading with the gyro.
+	 * @param joy The joystick to use
+	 * @param forwardAxis The axis that, when positive, moves the robot forward
+	 * @param slideAxis The axis that, when positive, slides the robot to its right
+	 * @param rotationAxis The axis that, when positive, turns the robot clockwise
+	 * @param throttleAxis The axis that, when positive, increases the power coefficient
+	 * @param minPower The minimum throttle that the robot can go at
+	 */
+	public void telePIDDrive(Joystick joy, int forwardAxis, int slideAxis, int rotateAxis, int throttleAxis, double minPower) {
+		//set power coefficient
+		if (minPower > 1) {
+			minPower = 1;
+		}
+		else if (minPower < 0) {
+			minPower = 0;
+		}
+		
+		double throttle = 1 - joy.getRawAxis(throttleAxis);
+		double power = minPower + ((1 - minPower) * throttle);
+		if (!gearIsFront) {
+			power = -power;
+		}
+		
+		//forward
+		double forwardSpeed = addDeadZone(joy.getRawAxis(forwardAxis)) * power;
+		
+		lfSpeed = forwardSpeed;
+		rfSpeed = forwardSpeed;
+		lbSpeed = forwardSpeed;
+		rbSpeed = forwardSpeed;
+		
+		//slide
+		double slideSpeed = addDeadZone(joy.getRawAxis(slideAxis)) * power;
+		lfSpeed -= slideSpeed;
+		rfSpeed += slideSpeed;
+		lbSpeed += slideSpeed;
+		rbSpeed -= slideSpeed;
+		
+		//rotate TODO test the code up to the end of this method.
+		double rotateSpeed = addDeadZone(joy.getRawAxis(rotateAxis)) * 0.5;
+		if (getPIDController().isEnabled() && rotateSpeed != 0) {
+			disable();
+		}
+		else if (!getPIDController().isEnabled() && rotateSpeed == 0 && Math.abs(gyro.getRate()) <= 0.1) {
+			enable();
+		}
+		lfSpeed -= rotateSpeed;
+		rfSpeed += rotateSpeed;
+		lbSpeed -= rotateSpeed;
+		rbSpeed += rotateSpeed;
+		
+		if (!getPIDController().isEnabled()) {
+			updateMotors();
+		}
+	}
+	
 	public void switchFront() {
 		gearIsFront = !gearIsFront;
 		if (gearIsFront) {
@@ -317,20 +418,5 @@ public class Drivetrain extends PIDSubsystem {
 		else {
 			System.out.println("The intake end is the front.");
 		}
-	}
-	
-	private double addDeadZone(double rawAxisValue) {
-		double newAxisValue;
-		double deadZoneRadius = 0.2;
-		if (deadZoneRadius < rawAxisValue) {
-			newAxisValue = rawAxisValue - deadZoneRadius;
-		}
-		else if (rawAxisValue < -deadZoneRadius) {
-			newAxisValue = rawAxisValue + deadZoneRadius;
-		}
-		else {
-			newAxisValue = 0;
-		}
-		return newAxisValue;
 	}
 }

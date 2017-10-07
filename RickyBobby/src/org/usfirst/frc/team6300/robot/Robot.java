@@ -67,38 +67,16 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
 		SmartDashboard.putData("Alliance Color Chooser", colorChooser);
 		
-		//gearCam = new UsbCamera("Gear Camera", 0);
-		//CameraServer.getInstance().startAutomaticCapture(gearCam);
-		//gearCam.setResolution(160, 120);
-		//gearCam.setFPS(20);
-		//gearCam.setBrightness(25);
-		//CameraServer.getInstance().startAutomaticCapture(gearCam);
-		
-		/*new Thread(() -> {
-			gearCam = new UsbCamera("Gear Camera", 0);
-			//gearCam.setResolution(160, 120);
-			gearCam.setFPS(20);
-			//CameraServer.getInstance().startAutomaticCapture(gearCam);
-			CvSink cvSink = CameraServer.getInstance().getVideo();
-			CvSource outputStream = CameraServer.getInstance().putVideo("GearCam B&W", 640, 480);
-			Mat source = new Mat();
-			Mat output = new Mat();
-			while (!Thread.interrupted()) {
-				cvSink.grabFrame(source);
-				Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-				outputStream.putFrame(output);
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					break;
-				}
-			}
-		}).start();*/
-		
-		//TODO test this vision thread
+		//TODO test this vision thread again
+		gearCam = new UsbCamera("Gear Camera", 0);
+		gearCam.setResolution(imgWidth, imgHeight);
+		gearCam.setFPS(20);
+		gearCam.setBrightness(5);
 		CvSource outputStream = CameraServer.getInstance().putVideo("GearCam B&W", imgWidth, imgHeight);
-		visionThread = new VisionThread(gearCam, new Desaturate(), pipeline -> {
-			outputStream.putFrame(pipeline.desaturateOutput());
+		visionThread = new VisionThread(gearCam, new FindGreenTape(), pipeline -> {
+			//outputStream.putFrame(pipeline.maskOutput());
+			//outputStream.putFrame(pipeline.blurOutput());
+			outputStream.putFrame(pipeline.resizeImageOutput());
 	    });
 	    visionThread.start();
 		
