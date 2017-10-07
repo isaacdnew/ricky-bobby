@@ -9,9 +9,10 @@ import org.usfirst.frc.team6300.robot.Robot;
  *
  */
 public class SwitchFront extends Command {
-	public SwitchFront() {
-		// Use requires() here to declare subsystem dependencies
-		requires(Robot.drivetrain);
+	private Robot robot;
+	public SwitchFront(Robot robot) {
+		this.robot = robot;
+		requires(robot.drivetrain);
 	}
 
 	// Called just before this Command runs the first time
@@ -33,7 +34,7 @@ public class SwitchFront extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.drivetrain.switchFront();
+		robot.drivetrain.switchFront();
 	}
 
 	// Called when another command which requires one or more of the same

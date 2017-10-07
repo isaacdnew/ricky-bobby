@@ -10,33 +10,34 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class LowGoal extends Command {
 	private boolean isRed;
-	
-    public LowGoal() {
-    	requires(Robot.agitator);
-    	requires(Robot.shooter);
-    	requires(Robot.drivetrain);
+	private Robot robot;
+    public LowGoal(Robot robot) {
+    	this.robot = robot;
+    	requires(robot.agitator);
+    	requires(robot.shooter);
+    	requires(robot.drivetrain);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	isRed = Robot.colorChooser.getSelected();
-    	Robot.shooter.spinUp(1);
-    	Robot.agitator.spinUp(1);
+    	isRed = robot.colorChooser.getSelected();
+    	robot.shooter.spinUp(1);
+    	robot.agitator.spinUp(1);
     	if (isRed) {
     		Timer.delay(5);
-    		Robot.shooter.stop();
-        	Robot.agitator.stop();
-    		Robot.drivetrain.goForward(0.3, 1.2);
+    		robot.shooter.stop();
+        	robot.agitator.stop();
+    		robot.drivetrain.goForward(0.3, 1.2);
     	}
     	else {
     		Timer.delay(10);
-        	Robot.shooter.stop();
-        	Robot.agitator.stop();
-        	Robot.drivetrain.enable();
-    		Robot.drivetrain.goForward(-0.3, 1.2);
-    		Robot.drivetrain.turnRight(60);
-    		Robot.drivetrain.goForward(-0.2, 2.8);
-    		Robot.drivetrain.goForward(-0.1, 10);
+        	robot.shooter.stop();
+        	robot.agitator.stop();
+        	robot.drivetrain.enable();
+    		robot.drivetrain.goForward(-0.3, 1.2);
+    		robot.drivetrain.turnRight(60);
+    		robot.drivetrain.goForward(-0.2, 2.8);
+    		robot.drivetrain.goForward(-0.1, 10);
     	}
     }
 

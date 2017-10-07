@@ -11,21 +11,23 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DeliverGear extends Command {
 	private String station;
+	private Robot robot;
 	
-	public DeliverGear() {
-		requires(Robot.drivetrain);
+	public DeliverGear(Robot robot) {
+		this.robot = robot;
+		requires(robot.drivetrain);
 	}
 	
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Robot.drivetrain.getPIDController().setOutputRange(-0.4, 0.4);
-		station = Robot.stationChooser.getSelected();
+		robot.drivetrain.getPIDController().setOutputRange(-0.4, 0.4);
+		station = robot.stationChooser.getSelected();
 		switch (station) {
 		case "center": {
-			Robot.drivetrain.enable();
-			Robot.drivetrain.goForward(0.3, 1.6);
-			Robot.drivetrain.goForward(0.1, 10);
+			robot.drivetrain.enable();
+			robot.drivetrain.goForward(0.3, 1.6);
+			robot.drivetrain.goForward(0.1, 10);
 			break;
 		}
 		case "leftRed": {
@@ -48,29 +50,29 @@ public class DeliverGear extends Command {
 	}
 	
 	private void leftRedOrRightBlue(boolean isRed) {
-		Robot.drivetrain.enable();
-		Robot.drivetrain.goForward(0.3, 1.27);
+		robot.drivetrain.enable();
+		robot.drivetrain.goForward(0.3, 1.27);
 		Timer.delay(0.5);
 		if (isRed) {
-			Robot.drivetrain.turnRight(60);
+			robot.drivetrain.turnRight(60);
 		}
 		else {
-			Robot.drivetrain.turnRight(-60);
+			robot.drivetrain.turnRight(-60);
 		}
-		Robot.drivetrain.goForward(0.2, 2.1);
+		robot.drivetrain.goForward(0.2, 2.1);
 	}
 	
 	private void leftBlueOrRightRed(boolean isRed) {
-		Robot.drivetrain.enable();
-		Robot.drivetrain.goForward(0.3, 1.2);
+		robot.drivetrain.enable();
+		robot.drivetrain.goForward(0.3, 1.2);
 		Timer.delay(0.5);
 		if (isRed) {
-			Robot.drivetrain.turnRight(-60);
+			robot.drivetrain.turnRight(-60);
 		}
 		else {
-			Robot.drivetrain.turnRight(60);
+			robot.drivetrain.turnRight(60);
 		}
-		Robot.drivetrain.goForward(0.2, 2.8);
+		robot.drivetrain.goForward(0.2, 2.8);
 	}
 	
 	@Override
@@ -84,11 +86,11 @@ public class DeliverGear extends Command {
 	
 	@Override
 	protected void end() {
-		Robot.drivetrain.disable();
+		robot.drivetrain.disable();
 	}
 	
 	@Override
 	protected void interrupted() {
-		Robot.drivetrain.disable();
+		robot.drivetrain.disable();
 	}
 }

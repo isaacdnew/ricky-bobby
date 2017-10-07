@@ -27,22 +27,23 @@ import org.usfirst.frc.team6300.robot.subsystems.*;
 public class Robot extends IterativeRobot {
 	public static OI oi;
 	
-	public static final Drivetrain drivetrain = new Drivetrain();
-	public static final Shooter shooter = new Shooter();
-	public static final Intake intake = new Intake();
-	public static final Climber climber = new Climber();
-	public static final Agitator agitator = new Agitator();
+	public final Drivetrain drivetrain = new Drivetrain(this);
+	public final Shooter shooter = new Shooter();
+	public final Intake intake = new Intake();
+	public final Climber climber = new Climber(this);
+	public final Agitator agitator = new Agitator();
 	
 	Command autonomousCommand;
-	private static final SendableChooser<Command> commandChooser = new SendableChooser<>();
-	public static final SendableChooser<String> stationChooser = new SendableChooser<>();
-	public static final SendableChooser<Boolean> colorChooser = new SendableChooser<>();
+	private final SendableChooser<Command> commandChooser = new SendableChooser<>();
+	public final SendableChooser<String> stationChooser = new SendableChooser<>();
+	public final SendableChooser<Boolean> colorChooser = new SendableChooser<>();
 	
-	private static final int imgWidth = 320;
-	private static final int imgHeight = 240;
+	private static final int imgWidth = 160;
+	private static final int imgHeight = 120;
 	
-	private static UsbCamera gearCam;
+	private UsbCamera gearCam;
 	private VisionThread visionThread;
+	private long startTime;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -50,11 +51,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		oi = new OI();
+		oi = new OI(this);
 		
-		commandChooser.addDefault("Deliver Gear", new DeliverGear());
-		commandChooser.addObject("Tune PID", new TunePID());
-		commandChooser.addObject("Shoot Low Goals", new LowGoal());
+		commandChooser.addDefault("Deliver Gear", new DeliverGear(this));
+		commandChooser.addObject("Tune PID", new TunePID(this));
+		commandChooser.addObject("Shoot Low Goals", new LowGoal(this));
 		
 		stationChooser.addDefault("Center", "center");
 		stationChooser.addObject("Left", "left");
@@ -72,19 +73,22 @@ public class Robot extends IterativeRobot {
 		gearCam.setResolution(imgWidth, imgHeight);
 		gearCam.setFPS(20);
 		gearCam.setBrightness(5);
-		CvSource outputStream = CameraServer.getInstance().putVideo("GearCam B&W", imgWidth, imgHeight);
-		visionThread = new VisionThread(gearCam, new FindGreenTape(), pipeline -> {
-			//outputStream.putFrame(pipeline.maskOutput());
-			//outputStream.putFrame(pipeline.blurOutput());
-			outputStream.putFrame(pipeline.resizeImageOutput());
-	    });
-	    visionThread.start();
-		
+		CameraServer.getInstance().startAutomaticCapture(gearCam);
+		startTime = System.currentTimeMillis();
 		drivetrain.calibrateGyro();
 	}
 	
 	@Override
 	public void robotPeriodic() {
+		if (visionThread == null && System.currentTimeMillis() > (startTime + 1000)) {
+			CvSource outputStream = CameraServer.getInstance().putVideo("GearCam", imgWidth, imgHeight);
+			visionThread = new VisionThread(gearCam, new FindGreenTape(), pipeline -> {
+				outputStream.putFrame(pipeline.maskOutput());
+				//outputStream.putFrame(pipeline.blurOutput());
+				//outputStream.putFrame(pipeline.resizeImageOutput());
+		    });
+		    visionThread.start();
+		}
 	}
 	
 	/**
@@ -95,6 +99,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void disabledInit() {
+		
 	}
 	
 	@Override

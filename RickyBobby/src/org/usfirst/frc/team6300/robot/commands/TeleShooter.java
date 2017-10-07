@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class TeleShooter extends Command {
+	Robot robot;
 	char button;
 	
-    public TeleShooter(char buttonID) {
+    public TeleShooter(Robot robot, char buttonID) {
+    	this.robot = robot;
     	button = buttonID;
-        requires(Robot.shooter);
+        requires(robot.shooter);
     }
 
     // Called just before this Command runs the first time
@@ -31,19 +33,19 @@ public class TeleShooter extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	if (button == 'a') {
-    		if (Robot.shooter.getSpeed() > 0) {
-    			Robot.shooter.stop();
+    		if (robot.shooter.getSpeed() > 0) {
+    			robot.shooter.stop();
     		}
     		else {
-    			Robot.shooter.spinUp(1);
+    			robot.shooter.spinUp(1);
     		}
     	}
     	else if (button == 'x') {
-    		if (Robot.shooter.getSpeed() < 0) {
-    			Robot.shooter.stop();
+    		if (robot.shooter.getSpeed() < 0) {
+    			robot.shooter.stop();
     		}
     		else {
-    			Robot.shooter.spinUp(-0.5);
+    			robot.shooter.spinUp(-0.5);
     		}
     	}
     }

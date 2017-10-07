@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class TeleClimber extends Command {
-
-    public TeleClimber() {
-        requires(Robot.climber);
+	Robot robot;
+	
+    public TeleClimber(Robot robot) {
+        this.robot = robot;
+    	requires(robot.climber);
     }
 
     // Called just before this Command runs the first time
@@ -20,7 +22,7 @@ public class TeleClimber extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.climber.setSpeed(OI.gamepadDr.getRawAxis(OI.leftTrigger));
+    	robot.climber.setSpeed(OI.gamepadDr.getRawAxis(OI.leftTrigger));
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -30,12 +32,12 @@ public class TeleClimber extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.climber.stop();
+    	robot.climber.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.climber.stop();
+    	robot.climber.stop();
     }
 }

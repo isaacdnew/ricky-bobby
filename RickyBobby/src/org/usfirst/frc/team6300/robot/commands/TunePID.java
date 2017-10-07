@@ -10,22 +10,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class TunePID extends Command {
-
-    public TunePID() {
+	Robot robot;
+	
+    public TunePID(Robot robot) {
         super();
-        requires(Robot.drivetrain);
+        this.robot = robot;
+        requires(robot.drivetrain);
     }
 
     // Called once when the command executes
     @Override
     protected void initialize() {
-    	Robot.drivetrain.enable();
+    	robot.drivetrain.enable();
     }
     
     @Override
     protected void execute() {
-    	SmartDashboard.putNumber("Heading", Robot.drivetrain.getHeading());
-    	SmartDashboard.putNumber("Setpoint", Robot.drivetrain.getSetpoint());
+    	SmartDashboard.putNumber("Heading", robot.drivetrain.getHeading());
+    	SmartDashboard.putNumber("Setpoint", robot.drivetrain.getSetpoint());
     }
     
     @Override

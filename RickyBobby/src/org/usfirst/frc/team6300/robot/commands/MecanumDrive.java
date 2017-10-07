@@ -10,20 +10,22 @@ import org.usfirst.frc.team6300.robot.Robot;
  */
 public class MecanumDrive extends Command {
 	private static final boolean isPID = true;
+	private Robot robot;
 	
-	public MecanumDrive() {
-		requires(Robot.drivetrain);
+	public MecanumDrive(Robot robot) {
+		this.robot = robot;
+		requires(robot.drivetrain);
 	}
 
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
 		if (isPID) {
-			Robot.drivetrain.enable();
-			Robot.drivetrain.getPIDController().setOutputRange(-1,  1);
+			robot.drivetrain.enable();
+			robot.drivetrain.getPIDController().setOutputRange(-1,  1);
 		}
 		else {
-			Robot.drivetrain.disable();
+			robot.drivetrain.disable();
 		}
 	}
 
@@ -31,10 +33,10 @@ public class MecanumDrive extends Command {
 	@Override
 	protected void execute() {
 		if (isPID) {
-			Robot.drivetrain.telePIDDrive(OI.gamepadDr, OI.leftYAxis, OI.leftXAxis, OI.rightXAxis, OI.rightTrigger, 0.5);
+			robot.drivetrain.telePIDDrive(OI.gamepadDr, OI.leftYAxis, OI.leftXAxis, OI.rightXAxis, OI.rightTrigger, 0.5);
 		}
 		else {
-			Robot.drivetrain.teleDrive(OI.gamepadDr, OI.leftYAxis, OI.leftXAxis, OI.rightXAxis, OI.rightTrigger, 0.5);
+			robot.drivetrain.teleDrive(OI.gamepadDr, OI.leftYAxis, OI.leftXAxis, OI.rightXAxis, OI.rightTrigger, 0.5);
 		}
 	}
 
@@ -47,13 +49,13 @@ public class MecanumDrive extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.drivetrain.coast();
+		robot.drivetrain.coast();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
-		Robot.drivetrain.coast();
+		robot.drivetrain.coast();
 	}
 }

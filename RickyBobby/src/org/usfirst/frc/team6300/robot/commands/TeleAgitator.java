@@ -9,10 +9,12 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class TeleAgitator extends Command {
 	char button;
+	Robot robot;
 	
-    public TeleAgitator(char buttonID) {
+    public TeleAgitator(Robot robot, char buttonID) {
+    	this.robot = robot;
     	button = buttonID;
-        requires(Robot.agitator);
+        requires(robot.agitator);
     }
 
     // Called just before this Command runs the first time
@@ -31,19 +33,19 @@ public class TeleAgitator extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	if (button == 'b') {
-    		if (Robot.agitator.getSpeed() < 0) {
-    			Robot.agitator.stop();
+    		if (robot.agitator.getSpeed() < 0) {
+    			robot.agitator.stop();
     		}
     		else {
-    			Robot.agitator.spinUp(1);
+    			robot.agitator.spinUp(1);
     		}
     	}
     	else if (button == 'y') {
-    		if (Robot.agitator.getSpeed() > 0) {
-    			Robot.agitator.stop();
+    		if (robot.agitator.getSpeed() > 0) {
+    			robot.agitator.stop();
     		}
     		else {
-    			Robot.agitator.spinUp(-1);
+    			robot.agitator.spinUp(-1);
     		}
     	}
     }
@@ -51,6 +53,6 @@ public class TeleAgitator extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.agitator.stop();
+    	robot.agitator.stop();
     }
 }

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
+import org.usfirst.frc.team6300.robot.Robot;
 import org.usfirst.frc.team6300.robot.RobotMap;
 import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
 
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * The drivetrain, consisting of four drive motors.
  */
 public class Drivetrain extends PIDSubsystem {
+	Robot robot;
 	//motors:
 	static SpeedController lfMotor = new VictorSP(RobotMap.lfMotor);
 	static SpeedController rfMotor = new VictorSP(RobotMap.rfMotor);
@@ -37,8 +39,9 @@ public class Drivetrain extends PIDSubsystem {
 	
 	boolean gearIsFront = true;
 	
-	public Drivetrain() {
+	public Drivetrain(Robot robot) {
 		super(0.04, 0.003, 0.1);
+		this.robot = robot;
 		gyro = new ADXRS450_Gyro();
 		getPIDController().setAbsoluteTolerance(0.5);
 		getPIDController().setContinuous(true);
@@ -51,7 +54,7 @@ public class Drivetrain extends PIDSubsystem {
 	}
 	
 	public void initDefaultCommand() {
-		setDefaultCommand(new MecanumDrive());
+		setDefaultCommand(new MecanumDrive(robot));
 	}
 	
 	

@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Agitator extends Subsystem {
-	static SpeedController agitatorMotor = new VictorSP(RobotMap.agitatorMotor);
+	private SpeedController agitatorMotor = new VictorSP(RobotMap.agitatorMotor);
 	double speed;
 	
 	public Agitator() {

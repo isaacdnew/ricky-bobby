@@ -22,7 +22,7 @@ public class Intake extends Subsystem {
 	}
 	
 	public void initDefaultCommand() {
-		setDefaultCommand(new TeleIntake());
+		setDefaultCommand(new TeleIntake(this));
 	}
 
 	public void setSpeed(double speed) {
