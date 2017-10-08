@@ -2,7 +2,7 @@ package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.Robot;
 import org.usfirst.frc.team6300.robot.RobotMap;
-import org.usfirst.frc.team6300.robot.commands.MecanumDrive;
+import org.usfirst.frc.team6300.robot.commands.TeleDrive;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
@@ -54,7 +54,7 @@ public class Drivetrain extends PIDSubsystem {
 	}
 	
 	public void initDefaultCommand() {
-		setDefaultCommand(new MecanumDrive(robot));
+		setDefaultCommand(new TeleDrive(this));
 	}
 	
 	

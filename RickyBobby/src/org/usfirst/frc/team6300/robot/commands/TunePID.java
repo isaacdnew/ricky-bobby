@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6300.robot.commands;
 
-import org.usfirst.frc.team6300.robot.Robot;
+import org.usfirst.frc.team6300.robot.subsystems.Drivetrain;
 
 //import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -10,24 +10,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class TunePID extends Command {
-	Robot robot;
+	Drivetrain drivetrain;
 	
-    public TunePID(Robot robot) {
+    public TunePID(Drivetrain drivetrain) {
         super();
-        this.robot = robot;
-        requires(robot.drivetrain);
+        this.drivetrain = drivetrain;
+        requires(drivetrain);
     }
 
     // Called once when the command executes
     @Override
     protected void initialize() {
-    	robot.drivetrain.enable();
+    	drivetrain.enable();
     }
     
     @Override
     protected void execute() {
-    	SmartDashboard.putNumber("Heading", robot.drivetrain.getHeading());
-    	SmartDashboard.putNumber("Setpoint", robot.drivetrain.getSetpoint());
+    	SmartDashboard.putNumber("Heading", drivetrain.getHeading());
+    	SmartDashboard.putNumber("Setpoint", drivetrain.getSetpoint());
     }
     
     @Override

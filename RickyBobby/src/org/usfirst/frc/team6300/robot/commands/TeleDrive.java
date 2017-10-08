@@ -3,29 +3,29 @@ package org.usfirst.frc.team6300.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team6300.robot.OI;
-import org.usfirst.frc.team6300.robot.Robot;
+import org.usfirst.frc.team6300.robot.subsystems.Drivetrain;
 
 /**
  *
  */
-public class MecanumDrive extends Command {
-	private static final boolean isPID = true;
-	private Robot robot;
+public class TeleDrive extends Command {
+	private final boolean isPID = true;
+	private Drivetrain drivetrain;
 	
-	public MecanumDrive(Robot robot) {
-		this.robot = robot;
-		requires(robot.drivetrain);
+	public TeleDrive(Drivetrain drivetrain) {
+		this.drivetrain = drivetrain;
+		requires(drivetrain);
 	}
 
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
 		if (isPID) {
-			robot.drivetrain.enable();
-			robot.drivetrain.getPIDController().setOutputRange(-1,  1);
+			drivetrain.enable();
+			drivetrain.getPIDController().setOutputRange(-1,  1);
 		}
 		else {
-			robot.drivetrain.disable();
+			drivetrain.disable();
 		}
 	}
 
@@ -33,10 +33,10 @@ public class MecanumDrive extends Command {
 	@Override
 	protected void execute() {
 		if (isPID) {
-			robot.drivetrain.telePIDDrive(OI.gamepadDr, OI.leftYAxis, OI.leftXAxis, OI.rightXAxis, OI.rightTrigger, 0.5);
+			drivetrain.telePIDDrive(OI.gamepadDr, OI.leftYAxis, OI.leftXAxis, OI.rightXAxis, OI.rightTrigger, 0.5);
 		}
 		else {
-			robot.drivetrain.teleDrive(OI.gamepadDr, OI.leftYAxis, OI.leftXAxis, OI.rightXAxis, OI.rightTrigger, 0.5);
+			drivetrain.teleDrive(OI.gamepadDr, OI.leftYAxis, OI.leftXAxis, OI.rightXAxis, OI.rightTrigger, 0.5);
 		}
 	}
 
@@ -49,13 +49,13 @@ public class MecanumDrive extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		robot.drivetrain.coast();
+		drivetrain.coast();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
-		robot.drivetrain.coast();
+		drivetrain.coast();
 	}
 }

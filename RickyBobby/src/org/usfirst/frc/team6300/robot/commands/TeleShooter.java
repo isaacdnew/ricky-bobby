@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6300.robot.commands;
 
-import org.usfirst.frc.team6300.robot.Robot;
+import org.usfirst.frc.team6300.robot.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class TeleShooter extends Command {
-	Robot robot;
+	Shooter shooter;
 	char button;
 	
-    public TeleShooter(Robot robot, char buttonID) {
-    	this.robot = robot;
+    public TeleShooter(Shooter shooter, char buttonID) {
+    	this.shooter = shooter;
     	button = buttonID;
-        requires(robot.shooter);
+        requires(shooter);
     }
 
     // Called just before this Command runs the first time
@@ -33,19 +33,19 @@ public class TeleShooter extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	if (button == 'a') {
-    		if (robot.shooter.getSpeed() > 0) {
-    			robot.shooter.stop();
+    		if (shooter.getSpeed() > 0) {
+    			shooter.stop();
     		}
     		else {
-    			robot.shooter.spinUp(1);
+    			shooter.spinUp(1);
     		}
     	}
     	else if (button == 'x') {
-    		if (robot.shooter.getSpeed() < 0) {
-    			robot.shooter.stop();
+    		if (shooter.getSpeed() < 0) {
+    			shooter.stop();
     		}
     		else {
-    			robot.shooter.spinUp(-0.5);
+    			shooter.spinUp(-0.5);
     		}
     	}
     }

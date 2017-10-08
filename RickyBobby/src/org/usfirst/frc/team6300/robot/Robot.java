@@ -1,19 +1,21 @@
 package org.usfirst.frc.team6300.robot;
 
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 //import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.VisionThread;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.core.Rect;
 
-//import org.opencv.core.Mat;
-//import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team6300.robot.commands.*;
 import org.usfirst.frc.team6300.robot.subsystems.*;
 
@@ -43,6 +45,8 @@ public class Robot extends IterativeRobot {
 	
 	private UsbCamera gearCam;
 	private VisionThread visionThread;
+	private final Object imgLock = new Object();
+	private double centerX = 0.0;
 	private long startTime;
 	
 	/**
@@ -54,7 +58,7 @@ public class Robot extends IterativeRobot {
 		oi = new OI(this);
 		
 		commandChooser.addDefault("Deliver Gear", new DeliverGear(this));
-		commandChooser.addObject("Tune PID", new TunePID(this));
+		commandChooser.addObject("Tune PID", new TunePID(drivetrain));
 		commandChooser.addObject("Shoot Low Goals", new LowGoal(this));
 		
 		stationChooser.addDefault("Center", "center");
@@ -86,6 +90,12 @@ public class Robot extends IterativeRobot {
 				outputStream.putFrame(pipeline.maskOutput());
 				//outputStream.putFrame(pipeline.blurOutput());
 				//outputStream.putFrame(pipeline.resizeImageOutput());
+				if (!pipeline.filterContoursOutput().isEmpty()) {
+		            Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+		            synchronized (imgLock) {
+		                centerX = r.x + (r.width / 2);
+		            }
+		        }
 		    });
 		    visionThread.start();
 		}

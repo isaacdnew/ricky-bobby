@@ -40,12 +40,12 @@ public class OI {
 	public static final Button shButtonY = new JoystickButton(gamepadSh, y);
 	
 	public OI(Robot robot) {
-		shButtonB.whenReleased(new TeleAgitator(robot, 'b'));
-		shButtonY.whenReleased(new TeleAgitator(robot, 'y'));
+		shButtonB.whenReleased(new TeleAgitator(robot.agitator, 'b'));
+		shButtonY.whenReleased(new TeleAgitator(robot.agitator, 'y'));
 		
-		drButtonA.whenReleased(new SwitchFront(robot));
+		drButtonA.whenReleased(new SwitchFront(robot.drivetrain));
 		
-		shButtonA.whenReleased(new TeleShooter(robot, 'a'));
-		shButtonX.whenReleased(new TeleShooter(robot, 'x'));
+		shButtonA.whenReleased(new TeleShooter(robot.shooter, 'a'));
+		shButtonX.whenReleased(new TeleShooter(robot.shooter, 'x'));
 	}
 }

@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6300.robot.commands;
 
-import org.usfirst.frc.team6300.robot.Robot;
+import org.usfirst.frc.team6300.robot.subsystems.Agitator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class TeleAgitator extends Command {
 	char button;
-	Robot robot;
+	Agitator agitator;
 	
-    public TeleAgitator(Robot robot, char buttonID) {
-    	this.robot = robot;
+    public TeleAgitator(Agitator agitator, char buttonID) {
+    	this.agitator = agitator;
     	button = buttonID;
-        requires(robot.agitator);
+        requires(agitator);
     }
 
     // Called just before this Command runs the first time
@@ -33,19 +33,19 @@ public class TeleAgitator extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	if (button == 'b') {
-    		if (robot.agitator.getSpeed() < 0) {
-    			robot.agitator.stop();
+    		if (agitator.getSpeed() < 0) {
+    			agitator.stop();
     		}
     		else {
-    			robot.agitator.spinUp(1);
+    			agitator.spinUp(1);
     		}
     	}
     	else if (button == 'y') {
-    		if (robot.agitator.getSpeed() > 0) {
-    			robot.agitator.stop();
+    		if (agitator.getSpeed() > 0) {
+    			agitator.stop();
     		}
     		else {
-    			robot.agitator.spinUp(-1);
+    			agitator.spinUp(-1);
     		}
     	}
     }
@@ -53,6 +53,6 @@ public class TeleAgitator extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	robot.agitator.stop();
+    	agitator.stop();
     }
 }

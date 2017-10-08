@@ -25,7 +25,7 @@ public class Climber extends Subsystem {
 	}
 	
 	public void initDefaultCommand() {
-		setDefaultCommand(new TeleClimber(robot));
+		setDefaultCommand(new TeleClimber(this));
 	}
 
 	public void setSpeed(double speed) {

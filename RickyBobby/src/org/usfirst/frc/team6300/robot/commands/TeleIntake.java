@@ -1,13 +1,12 @@
 package org.usfirst.frc.team6300.robot.commands;
 
 import org.usfirst.frc.team6300.robot.OI;
-import org.usfirst.frc.team6300.robot.Robot;
 import org.usfirst.frc.team6300.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ *  The ball intake.
  */
 public class TeleIntake extends Command {
 	Intake intake;
