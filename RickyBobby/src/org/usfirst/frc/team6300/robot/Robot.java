@@ -29,7 +29,7 @@ import org.usfirst.frc.team6300.robot.subsystems.*;
 public class Robot extends IterativeRobot {
 	public static OI oi;
 	
-	public final Drivetrain drivetrain = new Drivetrain(this);
+	public final Drivetrain drivetrain = new Drivetrain();
 	public final Shooter shooter = new Shooter();
 	public final Intake intake = new Intake();
 	public final Climber climber = new Climber(this);
@@ -72,7 +72,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
 		SmartDashboard.putData("Alliance Color Chooser", colorChooser);
 		
-		//TODO test this vision thread again
 		gearCam = new UsbCamera("Gear Camera", 0);
 		gearCam.setResolution(imgWidth, imgHeight);
 		gearCam.setFPS(20);
@@ -87,6 +86,7 @@ public class Robot extends IterativeRobot {
 		if (visionThread == null && System.currentTimeMillis() > (startTime + 1000)) {
 			CvSource outputStream = CameraServer.getInstance().putVideo("GearCam", imgWidth, imgHeight);
 			visionThread = new VisionThread(gearCam, new FindGreenTape(), pipeline -> {
+				double lastCenterX = 0.0;
 				outputStream.putFrame(pipeline.maskOutput());
 				//outputStream.putFrame(pipeline.blurOutput());
 				//outputStream.putFrame(pipeline.resizeImageOutput());
@@ -96,6 +96,10 @@ public class Robot extends IterativeRobot {
 		                centerX = r.x + (r.width / 2);
 		            }
 		        }
+				if (lastCenterX != centerX) {
+					System.out.println("Center X: " + centerX);
+					lastCenterX = centerX;
+				}
 		    });
 		    visionThread.start();
 		}

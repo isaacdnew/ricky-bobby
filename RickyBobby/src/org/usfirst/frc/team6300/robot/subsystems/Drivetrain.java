@@ -1,6 +1,5 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
-import org.usfirst.frc.team6300.robot.Robot;
 import org.usfirst.frc.team6300.robot.RobotMap;
 import org.usfirst.frc.team6300.robot.commands.TeleDrive;
 
@@ -17,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * The drivetrain, consisting of four drive motors.
  */
 public class Drivetrain extends PIDSubsystem {
-	//Robot robot;
 	//motors:
 	SpeedController lfMotor = new VictorSP(RobotMap.lfMotor);
 	SpeedController rfMotor = new VictorSP(RobotMap.rfMotor);
@@ -39,9 +37,8 @@ public class Drivetrain extends PIDSubsystem {
 	
 	boolean gearIsFront = true;
 	
-	public Drivetrain(Robot robot) {
+	public Drivetrain() {
 		super(0.04, 0.003, 0.1);
-		//this.robot = robot;
 		gyro = new ADXRS450_Gyro();
 		getPIDController().setAbsoluteTolerance(0.5);
 		getPIDController().setContinuous(true);
