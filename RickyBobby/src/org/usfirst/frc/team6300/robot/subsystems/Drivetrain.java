@@ -17,12 +17,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * The drivetrain, consisting of four drive motors.
  */
 public class Drivetrain extends PIDSubsystem {
-	Robot robot;
+	//Robot robot;
 	//motors:
-	static SpeedController lfMotor = new VictorSP(RobotMap.lfMotor);
-	static SpeedController rfMotor = new VictorSP(RobotMap.rfMotor);
-	static SpeedController lbMotor = new VictorSP(RobotMap.lbMotor);
-	static SpeedController rbMotor = new VictorSP(RobotMap.rbMotor);
+	SpeedController lfMotor = new VictorSP(RobotMap.lfMotor);
+	SpeedController rfMotor = new VictorSP(RobotMap.rfMotor);
+	SpeedController lbMotor = new VictorSP(RobotMap.lbMotor);
+	SpeedController rbMotor = new VictorSP(RobotMap.rbMotor);
 	
 	//motor speeds:
 	double lfSpeed = 0;
@@ -31,7 +31,7 @@ public class Drivetrain extends PIDSubsystem {
 	double rbSpeed = 0;
 	
 	//heading control:
-	static Gyro gyro;
+	Gyro gyro;
 	double lfOutput = 0;
 	double rfOutput = 0;
 	double lbOutput = 0;
@@ -41,7 +41,7 @@ public class Drivetrain extends PIDSubsystem {
 	
 	public Drivetrain(Robot robot) {
 		super(0.04, 0.003, 0.1);
-		this.robot = robot;
+		//this.robot = robot;
 		gyro = new ADXRS450_Gyro();
 		getPIDController().setAbsoluteTolerance(0.5);
 		getPIDController().setContinuous(true);
