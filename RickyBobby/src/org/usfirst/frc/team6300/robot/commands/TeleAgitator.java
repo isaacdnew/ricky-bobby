@@ -33,7 +33,7 @@ public class TeleAgitator extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	if (button == 'b') {
-    		if (agitator.getSpeed() < 0) {
+    		if (agitator.getSpeed() > 0) {
     			agitator.stop();
     		}
     		else {
@@ -41,7 +41,7 @@ public class TeleAgitator extends Command {
     		}
     	}
     	else if (button == 'y') {
-    		if (agitator.getSpeed() > 0) {
+    		if (agitator.getSpeed() < 0) {
     			agitator.stop();
     		}
     		else {
