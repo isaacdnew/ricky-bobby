@@ -29,6 +29,7 @@ public class FindGreenTape implements VisionPipeline {
 
 	//Outputs
 	private Mat resizeImageOutput = new Mat();
+	private Mat cvFlipOutput = new Mat();
 	private Mat blurOutput = new Mat();
 	private Mat hslThresholdOutput = new Mat();
 	private Mat maskOutput = new Mat();
@@ -51,21 +52,26 @@ public class FindGreenTape implements VisionPipeline {
 		int resizeImageInterpolation = Imgproc.INTER_CUBIC;
 		resizeImage(resizeImageInput, resizeImageWidth, resizeImageHeight, resizeImageInterpolation, resizeImageOutput);
 
+		// Step CV_flip0:
+		Mat cvFlipSrc = resizeImageOutput;
+		FlipCode cvFlipFlipcode = FlipCode.BOTH_AXES;
+		cvFlip(cvFlipSrc, cvFlipFlipcode, cvFlipOutput);
+
 		// Step Blur0:
-		Mat blurInput = resizeImageOutput;
-		BlurType blurType = BlurType.get("Box Blur");
-		double blurRadius = 4.504504504504506;
+		Mat blurInput = cvFlipOutput;
+		BlurType blurType = BlurType.get("Gaussian Blur");
+		double blurRadius = 1.8018018018018105;
 		blur(blurInput, blurType, blurRadius, blurOutput);
 
 		// Step HSL_Threshold0:
 		Mat hslThresholdInput = blurOutput;
-		double[] hslThresholdHue = {74.46043165467626, 94.43123938879455};
-		double[] hslThresholdSaturation = {133.00359712230215, 255.0};
-		double[] hslThresholdLuminance = {133.00359712230215, 255.0};
+		double[] hslThresholdHue = {76.07913669064747, 92.90322580645162};
+		double[] hslThresholdSaturation = {82.55395683453237, 255.0};
+		double[] hslThresholdLuminance = {75.67446043165468, 255.0};
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, hslThresholdOutput);
 
 		// Step Mask0:
-		Mat maskInput = resizeImageOutput;
+		Mat maskInput = blurOutput;
 		Mat maskMask = hslThresholdOutput;
 		mask(maskInput, maskMask, maskOutput);
 
@@ -101,6 +107,14 @@ public class FindGreenTape implements VisionPipeline {
 	 */
 	public Mat resizeImageOutput() {
 		return resizeImageOutput;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a CV_flip.
+	 * @return Mat output from CV_flip.
+	 */
+	public Mat cvFlipOutput() {
+		return cvFlipOutput;
 	}
 
 	/**
@@ -163,6 +177,32 @@ public class FindGreenTape implements VisionPipeline {
 	private void resizeImage(Mat input, double width, double height,
 		int interpolation, Mat output) {
 		Imgproc.resize(input, output, new Size(width, height), 0.0, 0.0, interpolation);
+	}
+
+	/**
+	 * Code used for CV_flip. 
+	 * Per OpenCV spec 0 -> flip on X axis.
+	 * >0 -> flip on Y axis.
+	 * <0 -> flip on both axes.
+	 */
+	public enum FlipCode {
+		X_AXIS(0),
+		Y_AXIS(1),
+		BOTH_AXES(-1);
+		public final int value;
+		FlipCode(int value) {
+			this.value = value;
+		}
+	}	
+	
+	/**
+	 * Flips an image along X, Y or both axes.
+	 * @param src Image to flip.
+	 * @param flipcode FlipCode of which direction to flip.
+	 * @param dst flipped version of the Image.
+	 */
+	private void cvFlip(Mat src, FlipCode flipcode, Mat dst) {
+		Core.flip(src, dst, flipcode.value);
 	}
 
 	/**

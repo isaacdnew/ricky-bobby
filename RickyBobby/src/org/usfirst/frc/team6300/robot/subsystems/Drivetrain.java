@@ -73,6 +73,10 @@ public class Drivetrain extends PIDSubsystem {
 		return angle;
 	}
 	
+	/**
+	 * 
+	 * @return the current heading of the robot
+	 */
 	public double getHeading() {
 		return returnPIDInput();
 	}
@@ -134,6 +138,12 @@ public class Drivetrain extends PIDSubsystem {
 		System.out.println("Done calibrating the gyro.");
 	}
 	
+	@Override
+	public void setSetpoint(double setpoint) {
+		setpoint -= 360 * Math.floor(setpoint / 360);
+		SmartDashboard.putNumber("Setpoint", setpoint);
+		super.setSetpoint(setpoint);
+	}
 	
 	
 	
@@ -151,16 +161,16 @@ public class Drivetrain extends PIDSubsystem {
 	
 	public void goForward(double power, double seconds) {
 		if (getPIDController().isEnabled()) {
-			lfSpeed = power;
-			rfSpeed = power;
-			lbSpeed = power;
-			rbSpeed = power;
+			lfSpeed = -power;
+			rfSpeed = -power;
+			lbSpeed = -power;
+			rbSpeed = -power;
 		}
 		else {
-			lfMotor.set(power);
-			rfMotor.set(power);
-			lbMotor.set(power);
-			rbMotor.set(power);
+			lfMotor.set(-power);
+			rfMotor.set(-power);
+			lbMotor.set(-power);
+			rbMotor.set(-power);
 		}
 		Timer.delay(seconds);
 		stop();
@@ -173,7 +183,7 @@ public class Drivetrain extends PIDSubsystem {
 		setSetpoint(getSetpoint() + degrees);
 		
 		while (!onTarget()) {
-			Timer.delay(0.1);
+			Timer.delay(0.05);
 		}
 		stop();
 	}
@@ -182,29 +192,43 @@ public class Drivetrain extends PIDSubsystem {
 		if (!getPIDController().isEnabled()) {
 			enable();
 		}
-		setSetpoint(getSetpoint() + degrees);
+		setSetpoint(getSetpoint() - degrees);
 		while (!getPIDController().onTarget()) {
-			Timer.delay(0.1);
+			Timer.delay(0.05);
 		}
 		stop();
 	}
 	
-	public void wiggleForward(double slidePower, double forwardPower, double amplitudeInSeconds, int iterations) {
+	public void pointTo(double degrees) {
 		if (!getPIDController().isEnabled()) {
 			enable();
 		}
-		for (int i = 0; i < (iterations * 2); i++) {	
-			lfSpeed = -slidePower + forwardPower;
-			rfSpeed = slidePower + forwardPower;
-			lbSpeed = slidePower + forwardPower;
-			rbSpeed = -slidePower + forwardPower;
-			Timer.delay(amplitudeInSeconds);
-			slidePower = -slidePower;
-		}
-		stop();
+		setSetpoint(getHeading() + degrees);
 	}
 	
 	
+	public void setDriveSpeeds(double forwardSpeed, double slideSpeed) {
+		if (!getPIDController().isEnabled()) {
+			enable();
+		}
+		lfSpeed = forwardSpeed;
+		rfSpeed = forwardSpeed;
+		lbSpeed = forwardSpeed;
+		rbSpeed = forwardSpeed;
+		
+		lfSpeed -= slideSpeed;
+		rfSpeed += slideSpeed;
+		lbSpeed += slideSpeed;
+		rbSpeed -= slideSpeed;
+		
+		if (lfSpeed > 1 || rfSpeed > 1 || lbSpeed > 1 || rbSpeed > 1) {
+			double maxSpeed = findMax(lfSpeed, rfSpeed, lbSpeed, rbSpeed);
+			lfSpeed /= maxSpeed;
+			rfSpeed /= maxSpeed;
+			lbSpeed /= maxSpeed;
+			rbSpeed /= maxSpeed;
+		}
+	}
 	
 	
 	

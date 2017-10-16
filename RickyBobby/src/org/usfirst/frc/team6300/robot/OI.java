@@ -1,5 +1,6 @@
 package org.usfirst.frc.team6300.robot;
 
+import org.usfirst.frc.team6300.robot.commands.PlaceGear;
 import org.usfirst.frc.team6300.robot.commands.SwitchFront;
 import org.usfirst.frc.team6300.robot.commands.TeleAgitator;
 import org.usfirst.frc.team6300.robot.commands.TeleShooter;
@@ -32,6 +33,7 @@ public class OI {
 	//create joysticks
 	public static final Joystick gamepadDr = new Joystick(0);
 	public static final Button drButtonA = new JoystickButton(gamepadDr, a);
+	public static final Button drButtonY = new JoystickButton(gamepadDr, y);
 	
 	public static final Joystick gamepadSh = new Joystick(1);
 	public static final Button shButtonA = new JoystickButton(gamepadSh, a);
@@ -44,6 +46,7 @@ public class OI {
 		shButtonY.whenReleased(new TeleAgitator(robot.agitator, 'y'));
 		
 		drButtonA.whenReleased(new SwitchFront(robot.drivetrain));
+		drButtonY.toggleWhenPressed(new PlaceGear(robot.drivetrain, robot.gearCam));
 		
 		shButtonA.whenReleased(new TeleShooter(robot.shooter, 'a'));
 		shButtonX.whenReleased(new TeleShooter(robot.shooter, 'x'));
