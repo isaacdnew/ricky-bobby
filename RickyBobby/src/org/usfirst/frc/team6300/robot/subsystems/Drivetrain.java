@@ -51,7 +51,12 @@ public class Drivetrain extends PIDSubsystem {
 	}
 	
 	public void initDefaultCommand() {
-		setDefaultCommand(new TeleDrive(this));
+		if (gearIsFront) {
+			setDefaultCommand(new TeleDrive(this));
+		}
+		else {
+			setDefaultCommand(new TeleDrive(this));
+		}
 	}
 	
 	
@@ -305,7 +310,14 @@ public class Drivetrain extends PIDSubsystem {
 		return newAxisValue;
 	}
 	
-	
+	public String front() {
+		if (gearIsFront) {
+			return "gear";
+		}
+		else {
+			return "intake";
+		}
+	}
 	
 	
 	
@@ -432,6 +444,41 @@ public class Drivetrain extends PIDSubsystem {
 		if (!getPIDController().isEnabled()) {
 			updateMotors();
 		}
+	}
+	
+	public void teleTranslate(Joystick joy, int forwardAxis, int slideAxis, int throttleAxis, double minPower) {
+		//set power coefficient
+				if (minPower > 1) {
+					minPower = 1;
+				}
+				else if (minPower < 0) {
+					minPower = 0;
+				}
+				
+				double throttle = 1 - joy.getRawAxis(throttleAxis);
+				double power = minPower + ((1 - minPower) * throttle);
+				if (!gearIsFront) {
+					power = -power;
+				}
+				
+				//forward
+				double forwardSpeed = addDeadZone(joy.getRawAxis(forwardAxis)) * power;
+				
+				lfSpeed = forwardSpeed;
+				rfSpeed = forwardSpeed;
+				lbSpeed = forwardSpeed;
+				rbSpeed = forwardSpeed;
+				
+				//slide
+				double slideSpeed = addDeadZone(joy.getRawAxis(slideAxis)) * power;
+				lfSpeed -= slideSpeed;
+				rfSpeed += slideSpeed;
+				lbSpeed += slideSpeed;
+				rbSpeed -= slideSpeed;
+				
+				if (!getPIDController().isEnabled()) {
+					updateMotors();
+				}
 	}
 	
 	public void switchFront() {

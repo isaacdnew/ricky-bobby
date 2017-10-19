@@ -27,6 +27,7 @@ public class TeleDrive extends Command {
 		else {
 			drivetrain.disable();
 		}
+		System.out.println("The " + drivetrain.front() + " end is the front.");
 	}
 
 	// Called repeatedly when this Command is scheduled to run

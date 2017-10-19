@@ -1,5 +1,6 @@
 package org.usfirst.frc.team6300.robot.commands;
 
+import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team6300.robot.subsystems.GearCam;
 
@@ -14,10 +15,12 @@ public class PlaceGear extends Command {
 	GearCam gearCam;
 	double slideDistance = 0.0;
 	double lastCenterX = 0.0;
+	boolean isAuto;
 	
-    public PlaceGear(Drivetrain drivetrain, GearCam gearCam) {
+    public PlaceGear(Drivetrain drivetrain, GearCam gearCam, boolean isAuto) {
     	this.drivetrain = drivetrain;
     	this.gearCam = gearCam;
+    	this.isAuto = isAuto;
     	requires(drivetrain);
     	requires(gearCam);
     }
@@ -27,7 +30,9 @@ public class PlaceGear extends Command {
     	if (!drivetrain.getPIDController().isEnabled()) {
     		drivetrain.enable();
     	}
-    	drivetrain.setDriveSpeeds(-0.2, 0);
+    	if (isAuto) {
+    		drivetrain.setDriveSpeeds(-0.2, 0);
+    	}
     	lastCenterX = gearCam.getCenterX();
     	System.out.println("Placing Gear...");
     }
@@ -38,7 +43,12 @@ public class PlaceGear extends Command {
     		lastCenterX = gearCam.getCenterX();
     		double turnAngle = ((gearCam.getCenterX() - (gearCam.getImgWidth() / 1.25)) / (gearCam.getImgWidth()) * (gearCam.getFieldOfView() / 5));
     		double slideSpeed = (gearCam.getCenterX() - (gearCam.getImgWidth() / 1.25)) / gearCam.getImgWidth();
-    		drivetrain.setDriveSpeeds(-0.2, slideSpeed);
+    		if (isAuto) {
+    			drivetrain.setDriveSpeeds(-0.2, slideSpeed);
+    		}
+    		else {
+    			drivetrain.setDriveSpeeds(OI.gamepadDr.getRawAxis(OI.leftYAxis), OI.gamepadDr.getRawAxis(OI.leftXAxis));
+    		}
     		drivetrain.turnRight(turnAngle);
         	System.out.println("Turning " + turnAngle + " degrees.");
         	SmartDashboard.putNumber("turnAngle", turnAngle);

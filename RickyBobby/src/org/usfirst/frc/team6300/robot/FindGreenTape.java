@@ -65,7 +65,7 @@ public class FindGreenTape implements VisionPipeline {
 
 		// Step HSL_Threshold0:
 		Mat hslThresholdInput = blurOutput;
-		double[] hslThresholdHue = {76.07913669064747, 92.90322580645162};
+		double[] hslThresholdHue = {66.36690647482013, 83.73514431239389};
 		double[] hslThresholdSaturation = {82.55395683453237, 255.0};
 		double[] hslThresholdLuminance = {75.67446043165468, 255.0};
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, hslThresholdOutput);

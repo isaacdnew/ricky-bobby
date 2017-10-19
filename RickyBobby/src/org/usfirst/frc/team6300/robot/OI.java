@@ -46,7 +46,7 @@ public class OI {
 		shButtonY.whenReleased(new TeleAgitator(robot.agitator, 'y'));
 		
 		drButtonA.whenReleased(new SwitchFront(robot.drivetrain));
-		drButtonY.toggleWhenPressed(new PlaceGear(robot.drivetrain, robot.gearCam));
+		drButtonY.toggleWhenPressed(new PlaceGear(robot.drivetrain, robot.gearCam, false));
 		
 		shButtonA.whenReleased(new TeleShooter(robot.shooter, 'a'));
 		shButtonX.whenReleased(new TeleShooter(robot.shooter, 'x'));

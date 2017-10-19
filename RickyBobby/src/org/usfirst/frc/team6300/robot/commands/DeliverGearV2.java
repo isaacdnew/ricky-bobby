@@ -10,6 +10,6 @@ public class DeliverGearV2 extends CommandGroup {
 
     public DeliverGearV2(Robot robot) {
     	addSequential(new PositionForDelivery(robot));
-    	addSequential(new PlaceGear(robot.drivetrain, robot.gearCam));
+    	addSequential(new PlaceGear(robot.drivetrain, robot.gearCam, true));
     }
 }
