@@ -43,6 +43,7 @@ public class OI {
 	public static final Button shButtonY = new JoystickButton(gamepadSh, y);
 	
 	//create commands
+	//private final PlaceGear placeGear;
 	private final PlaceGear placeGear;
 	
 	public OI(Robot robot) {

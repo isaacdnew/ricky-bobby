@@ -45,7 +45,7 @@ public class Robot extends IterativeRobot {
 		timer = new Timer();
 		oi = new OI(this);
 		
-		commandChooser.addDefault("Deliver Gear", new DeliverGearV2(this));
+		commandChooser.addDefault("Deliver Gear", new DeliverGear(this));
 		commandChooser.addObject("Tune PID", new TunePID(drivetrain));
 		commandChooser.addObject("Shoot Low Goals", new LowGoal(this));
 		

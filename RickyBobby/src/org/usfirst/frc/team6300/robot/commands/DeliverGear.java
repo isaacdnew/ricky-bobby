@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class DeliverGearV2 extends CommandGroup {
+public class DeliverGear extends CommandGroup {
 
-    public DeliverGearV2(Robot robot) {
+    public DeliverGear(Robot robot) {
     	addSequential(new PositionForDelivery(robot));
     	addSequential(new PlaceGear(robot.drivetrain, robot.gearCam, true));
     }

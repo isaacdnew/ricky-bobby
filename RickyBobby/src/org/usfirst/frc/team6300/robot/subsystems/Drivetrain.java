@@ -37,8 +37,14 @@ public class Drivetrain extends PIDSubsystem {
 	
 	boolean gearIsFront = true;
 	
+	static final double p = 0.04;
+	static final double i = 0.003;
+	static final double d = 0.1;
+	static final double pidPeriod = 0.005;
+	static final double feedForward = 0.04;
+	
 	public Drivetrain() {
-		super(0.04, 0.003, 0.1);
+		super(p, i, d, pidPeriod, feedForward);
 		gyro = new ADXRS450_Gyro();
 		getPIDController().setAbsoluteTolerance(0.5);
 		getPIDController().setContinuous(true);
@@ -186,10 +192,6 @@ public class Drivetrain extends PIDSubsystem {
 			enable();
 		}
 		setSetpoint(getSetpoint() + degrees);
-		
-		while (!onTarget()) {
-			Timer.delay(0.05);
-		}
 		stop();
 	}
 	
@@ -198,27 +200,23 @@ public class Drivetrain extends PIDSubsystem {
 			enable();
 		}
 		setSetpoint(getSetpoint() - degrees);
-		while (!getPIDController().onTarget()) {
-			Timer.delay(0.05);
-		}
 		stop();
 	}
 	
+	/**
+	 * Sets the heading setpoint to its current value plus degrees. This DOES NOT wait for the target heading to be reached,
+	 * so don't call it repeatedly or the robot won't turn.
+	 * @param degrees the number of degrees clockwise of current heading to turn to.
+	 */
 	public void pointTo(double degrees) {
 		if (!getPIDController().isEnabled()) {
 			enable();
 		}
 		setSetpoint(getHeading() + degrees);
-		while (!getPIDController().onTarget()) {
-			Timer.delay(0.05);
-		}
 	}
 	
 	
 	public void setDriveSpeeds(double forwardSpeed, double slideSpeed) {
-		if (!getPIDController().isEnabled()) {
-			enable();
-		}
 		lfSpeed = forwardSpeed;
 		rfSpeed = forwardSpeed;
 		lbSpeed = forwardSpeed;
@@ -235,6 +233,9 @@ public class Drivetrain extends PIDSubsystem {
 			rfSpeed /= maxSpeed;
 			lbSpeed /= maxSpeed;
 			rbSpeed /= maxSpeed;
+		}
+		if (!getPIDController().isEnabled()) {
+			updateMotors();
 		}
 	}
 	
@@ -256,7 +257,7 @@ public class Drivetrain extends PIDSubsystem {
 	
 	/**
 	 * Stops the robot's movement forward, backward, and side to side.
-	 * <p>This still leaves the heading control on.
+	 * <p>This still leaves the PID controller on.
 	 */
 	public void stop() {
 		if (getPIDController().isEnabled()) {
