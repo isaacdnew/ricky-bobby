@@ -1,5 +1,6 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
+import org.usfirst.frc.team6300.robot.Robot;
 import org.usfirst.frc.team6300.robot.RobotMap;
 import org.usfirst.frc.team6300.robot.commands.TeleClimber;
 
@@ -11,9 +12,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Climber extends Subsystem {
-	static SpeedController climberMotor = new VictorSP(RobotMap.climberMotor);
+	SpeedController climberMotor = new VictorSP(RobotMap.climberMotor);
+	Robot robot;
 	
-	public Climber() {
+	public Climber(Robot robot) {
+		this.robot = robot;
 		climberMotor.setInverted(RobotMap.climberInverted);
 	}
 	
@@ -22,7 +25,7 @@ public class Climber extends Subsystem {
 	}
 	
 	public void initDefaultCommand() {
-		setDefaultCommand(new TeleClimber(this));
+		setDefaultCommand(new TeleClimber(robot));
 	}
 
 	public void setSpeed(double speed) {

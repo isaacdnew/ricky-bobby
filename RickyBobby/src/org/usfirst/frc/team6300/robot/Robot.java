@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6300.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
@@ -19,13 +20,15 @@ import org.usfirst.frc.team6300.robot.subsystems.*;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	public Timer timer;
 	public OI oi;
 	
 	public final Drivetrain drivetrain = new Drivetrain();
 	public final Shooter shooter = new Shooter();
 	public final Intake intake = new Intake();
-	public final Climber climber = new Climber();
+	public final Climber climber = new Climber(this);
 	public final Agitator agitator = new Agitator();
+	
 	public final GearCam gearCam = new GearCam(RobotMap.gearCamPort);
 	
 	Command autonomousCommand;
@@ -39,6 +42,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		timer = new Timer();
 		oi = new OI(this);
 		
 		commandChooser.addDefault("Deliver Gear", new DeliverGearV2(this));
@@ -73,7 +77,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-		
+		agitator.stop();
+		shooter.stop();
+		drivetrain.coast();
+		intake.stop();
+		climber.stop();
 	}
 	
 	@Override
@@ -98,6 +106,9 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
+		timer.reset();
+		timer.start();
+		System.out.println("The " + drivetrain.front() + " end is the front.");
 	}
 
 	/**

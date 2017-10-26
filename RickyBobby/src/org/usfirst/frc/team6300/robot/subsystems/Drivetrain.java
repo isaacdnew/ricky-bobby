@@ -209,6 +209,9 @@ public class Drivetrain extends PIDSubsystem {
 			enable();
 		}
 		setSetpoint(getHeading() + degrees);
+		while (!getPIDController().onTarget()) {
+			Timer.delay(0.05);
+		}
 	}
 	
 	
@@ -433,7 +436,7 @@ public class Drivetrain extends PIDSubsystem {
 		if (getPIDController().isEnabled() && rotateSpeed != 0) {
 			disable();
 		}
-		else if (!getPIDController().isEnabled() && rotateSpeed == 0 && Math.abs(gyro.getRate()) <= 0.1) {
+		else if (!getPIDController().isEnabled() && rotateSpeed == 0 && Math.abs(gyro.getRate()) <= 0.05) {
 			enable();
 		}
 		lfSpeed -= rotateSpeed;
@@ -483,11 +486,5 @@ public class Drivetrain extends PIDSubsystem {
 	
 	public void switchFront() {
 		gearIsFront = !gearIsFront;
-		if (gearIsFront) {
-			System.out.println("The gear end is the front.");
-		}
-		else {
-			System.out.println("The intake end is the front.");
-		}
 	}
 }

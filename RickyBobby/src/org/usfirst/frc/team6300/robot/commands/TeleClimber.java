@@ -1,8 +1,11 @@
 package org.usfirst.frc.team6300.robot.commands;
 
 import org.usfirst.frc.team6300.robot.OI;
+import org.usfirst.frc.team6300.robot.Robot;
 import org.usfirst.frc.team6300.robot.subsystems.Climber;
+import org.usfirst.frc.team6300.robot.subsystems.Drivetrain;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -10,9 +13,12 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class TeleClimber extends Command {
 	Climber climber;
+	Drivetrain drivetrain;
+	boolean climbing = false;
 	
-    public TeleClimber(Climber climber) {
-        this.climber = climber;
+    public TeleClimber(Robot robot) {
+        climber = robot.climber;
+        drivetrain = robot.drivetrain;
     	requires(climber);
     }
 
@@ -22,7 +28,10 @@ public class TeleClimber extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	climber.setSpeed(OI.gamepadDr.getRawAxis(OI.leftTrigger));
+    	if (OI.gamepadDr.getRawAxis(OI.leftTrigger) > 0 && Timer.getMatchTime() >= 100) {
+    		climbing = true;
+    		climber.setSpeed(OI.gamepadDr.getRawAxis(OI.leftTrigger));
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -39,5 +48,9 @@ public class TeleClimber extends Command {
     // subsystems is scheduled to run
     protected void interrupted() {
     	climber.stop();
+    }
+    
+    public boolean isClimbing() {
+    	return climbing;
     }
 }

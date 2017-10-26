@@ -33,6 +33,7 @@ public class OI {
 	//create joysticks
 	public static final Joystick gamepadDr = new Joystick(0);
 	public static final Button drButtonA = new JoystickButton(gamepadDr, a);
+	public static final Button drButtonB = new JoystickButton(gamepadDr, b);
 	public static final Button drButtonY = new JoystickButton(gamepadDr, y);
 	
 	public static final Joystick gamepadSh = new Joystick(1);
@@ -41,12 +42,18 @@ public class OI {
 	public static final Button shButtonX = new JoystickButton(gamepadSh, x);
 	public static final Button shButtonY = new JoystickButton(gamepadSh, y);
 	
+	//create commands
+	private final PlaceGear placeGear;
+	
 	public OI(Robot robot) {
+		placeGear = new PlaceGear(robot.drivetrain, robot.gearCam, false);
+		
 		shButtonB.whenReleased(new TeleAgitator(robot.agitator, 'b'));
 		shButtonY.whenReleased(new TeleAgitator(robot.agitator, 'y'));
 		
 		drButtonA.whenReleased(new SwitchFront(robot.drivetrain));
-		drButtonY.toggleWhenPressed(new PlaceGear(robot.drivetrain, robot.gearCam, false));
+		drButtonY.whenPressed(placeGear);
+		drButtonB.cancelWhenPressed(placeGear);
 		
 		shButtonA.whenReleased(new TeleShooter(robot.shooter, 'a'));
 		shButtonX.whenReleased(new TeleShooter(robot.shooter, 'x'));

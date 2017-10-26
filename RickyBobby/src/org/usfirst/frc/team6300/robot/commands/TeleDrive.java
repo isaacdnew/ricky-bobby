@@ -11,6 +11,7 @@ import org.usfirst.frc.team6300.robot.subsystems.Drivetrain;
 public class TeleDrive extends Command {
 	private final boolean isPID = true;
 	private Drivetrain drivetrain;
+	String lastFront;
 	
 	public TeleDrive(Drivetrain drivetrain) {
 		this.drivetrain = drivetrain;
@@ -27,7 +28,7 @@ public class TeleDrive extends Command {
 		else {
 			drivetrain.disable();
 		}
-		System.out.println("The " + drivetrain.front() + " end is the front.");
+		lastFront = drivetrain.front();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -38,6 +39,10 @@ public class TeleDrive extends Command {
 		}
 		else {
 			drivetrain.teleDrive(OI.gamepadDr, OI.leftYAxis, OI.leftXAxis, OI.rightXAxis, OI.rightTrigger, 0.5);
+		}
+		if (lastFront != drivetrain.front()) {
+			System.out.println("The " + drivetrain.front() + " end is the front.");
+			lastFront = drivetrain.front();
 		}
 	}
 
