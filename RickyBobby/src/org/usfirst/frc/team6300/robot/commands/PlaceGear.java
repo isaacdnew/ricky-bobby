@@ -41,7 +41,7 @@ public class PlaceGear extends Command {
 	protected void execute() {
 		if (gearCam.getTurnAngle() != lastTurnAngle) {
 			lastTurnAngle = gearCam.getTurnAngle();
-			drivetrain.turnRight(gearCam.getTurnAngle());
+			drivetrain.pointTo(gearCam.getTurnAngle());
 		}
 		
 		if (!isAuto && operatorSlideControl) {
