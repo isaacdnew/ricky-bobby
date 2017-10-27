@@ -32,9 +32,9 @@ public class PositionForDelivery extends Command {
 			robot.drivetrain.enable();
 			robot.drivetrain.goForward(0.3, 1.2);
 		}
-		robot.drivetrain.turnRight(60);
 		robot.drivetrain.stop();
 		Timer.delay(0.5);
+		robot.drivetrain.turnRight(60);
 	}
 	
 	private void right(boolean isRed) {
@@ -46,9 +46,9 @@ public class PositionForDelivery extends Command {
 			robot.drivetrain.enable();
 			robot.drivetrain.goForward(0.3, 1.27);
 		}
-		robot.drivetrain.turnLeft(60);
 		robot.drivetrain.stop();
 		Timer.delay(0.5);
+		robot.drivetrain.turnLeft(60);
 	}
 	
 	@Override

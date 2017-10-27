@@ -31,9 +31,6 @@ public class PlaceGear extends Command {
 		if (!drivetrain.getPIDController().isEnabled()) {
 			drivetrain.enable();
 		}
-		if (isAuto) {
-			drivetrain.setDriveSpeeds(-0.2, 0);
-		}
 		System.out.println("Placing gear...");
 	}
 	
@@ -42,13 +39,17 @@ public class PlaceGear extends Command {
 		if (gearCam.getTurnAngle() != lastTurnAngle) {
 			lastTurnAngle = gearCam.getTurnAngle();
 			drivetrain.pointTo(gearCam.getTurnAngle());
+			if (isAuto) {
+				slideSpeed = gearCam.getTurnAngle() / 4;
+				drivetrain.setDriveSpeeds(-0.2, slideSpeed);
+			}
 		}
 		
 		if (!isAuto && operatorSlideControl) {
 			drivetrain.setDriveSpeeds(OI.gamepadDr.getRawAxis(OI.leftYAxis), OI.gamepadDr.getRawAxis(OI.leftXAxis));
 		}
 		else if (!isAuto && !operatorSlideControl) {
-			slideSpeed = gearCam.getTurnAngle() * 5;
+			slideSpeed = gearCam.getTurnAngle() / 4;
 			drivetrain.setDriveSpeeds(OI.gamepadDr.getRawAxis(OI.leftYAxis), slideSpeed);
 		}
 	}

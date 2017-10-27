@@ -37,16 +37,16 @@ public class Drivetrain extends PIDSubsystem {
 	
 	boolean gearIsFront = true;
 	
-	static final double p = 0.04;
-	static final double i = 0.003;
-	static final double d = 0.1;
+	static final double p = 0.06;
+	static final double i = 0.0001;
+	static final double d = 0.15;
+	static final double feedForward = 0.01;
 	static final double pidPeriod = 0.005;
-	static final double feedForward = 0.04;
 	
 	public Drivetrain() {
-		super(p, i, d, pidPeriod, feedForward);
+		super("drivetrain", p, i, d, feedForward, pidPeriod);
 		gyro = new ADXRS450_Gyro();
-		getPIDController().setAbsoluteTolerance(0.5);
+		getPIDController().setAbsoluteTolerance(1);
 		getPIDController().setContinuous(true);
 		getPIDController().setInputRange(0, 360);
 		
@@ -192,6 +192,9 @@ public class Drivetrain extends PIDSubsystem {
 			enable();
 		}
 		setSetpoint(getSetpoint() + degrees);
+		while (!getPIDController().onTarget()) {
+			Timer.delay(0.5);
+		}
 		stop();
 	}
 	
@@ -200,6 +203,9 @@ public class Drivetrain extends PIDSubsystem {
 			enable();
 		}
 		setSetpoint(getSetpoint() - degrees);
+		while (!getPIDController().onTarget()) {
+			Timer.delay(0.5);
+		}
 		stop();
 	}
 	
