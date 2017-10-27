@@ -18,8 +18,9 @@ public class RobotMap {
 	public static final boolean lbInverted = false;
 	public static final boolean rbInverted = true;
 	
-	//gear camera
+	//cameras
 	public static final int gearCamPort = 0;
+	public static final int shooterCamPort = 1;
 	
 	//shooter
 	public static final int flyMotor = 6;

@@ -30,6 +30,7 @@ public class Robot extends IterativeRobot {
 	public final Agitator agitator = new Agitator();
 	
 	public final GearCam gearCam = new GearCam(RobotMap.gearCamPort);
+	public final ShooterCam shooterCam = new ShooterCam(RobotMap.shooterCamPort);
 	
 	Command autonomousCommand;
 	private final SendableChooser<Command> commandChooser = new SendableChooser<>();
@@ -60,6 +61,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
 		SmartDashboard.putData("Alliance Color Chooser", colorChooser);
 		gearCam.startProcessing();
+		shooterCam.startProcessing();
 		
 		drivetrain.calibrateGyro();
 	}

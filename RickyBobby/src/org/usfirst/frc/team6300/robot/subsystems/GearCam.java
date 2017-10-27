@@ -26,7 +26,6 @@ public class GearCam extends Subsystem {
 	
 	VisionThread visionThread;
 	final Object turnAngleSync = new Object();
-	final Object lastTurnAngleSync = new Object();
 	double centerX = 0.0;
 	double lastTurnAngle = 0.0;
 	double turnAngle = 0.0;
@@ -55,7 +54,7 @@ public class GearCam extends Subsystem {
 				Rect rect = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
 				centerX = (rect.x + (rect.width / 2));
 				synchronized (turnAngleSync) {
-					turnAngle = ((centerX / imgWidth) - 0.5) * 4/* * (fieldOfView / 2)*/;
+					turnAngle = ((centerX / imgWidth) - 0.5) * 4;
 				}
 			}
 			else if (pipeline.filterContoursOutput().size() == 2) {
@@ -65,15 +64,13 @@ public class GearCam extends Subsystem {
 	            double rightX = (rectR.x + (rectR.width / 2));
 	            centerX = (rightX + leftX) / 2;
 	            synchronized(turnAngleSync) {
-	            	turnAngle = ((centerX / imgWidth) - 0.5) * 4/* * (fieldOfView / 2)*/;
+	            	turnAngle = ((centerX / imgWidth) - 0.6) * 4;
 	            }
 	        }
 			if (lastTurnAngle != turnAngle) {
 				SmartDashboard.putNumber("Center X", centerX);
-				//SmartDashboard.putNumber("Turn Angle", (centerX / imgWidth) * fieldOfView);
-				synchronized(lastTurnAngleSync) {
-					lastTurnAngle = turnAngle;
-				}
+				//SmartDashboard.putNumber("Turn Angle", turnAngle;
+				lastTurnAngle = turnAngle;
 			}
 	    });
 	    visionThread.start();
@@ -83,20 +80,6 @@ public class GearCam extends Subsystem {
 		synchronized(turnAngleSync) {
 			return turnAngle;
 		}
-	}
-	
-	public double getLastTurnAngle() {
-		synchronized(lastTurnAngleSync) {
-			return lastTurnAngle;
-		}
-	}
-	
-	public double getImgWidth() {
-		return imgWidth;
-	}
-	
-	public double getFieldOfView() {
-		return fieldOfView;
 	}
 	
 	public void initDefaultCommand() {
