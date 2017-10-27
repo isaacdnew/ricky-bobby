@@ -35,7 +35,7 @@ public class TeleShooter extends Command {
     			Robot.shooter.stop();
     		}
     		else {
-    			Robot.shooter.spinUp(1);
+    			Robot.shooter.spinUp(0.87);
     		}
     	}
     	else if (button == 'x') {
