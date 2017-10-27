@@ -204,8 +204,7 @@ public class Drivetrain extends PIDSubsystem {
 	}
 	
 	/**
-	 * Sets the heading setpoint to its current value plus degrees. This DOES NOT wait for the target heading to be reached,
-	 * so don't call it repeatedly or the robot won't turn.
+	 * Sets the setpoint to the current heading plus degrees.
 	 * @param degrees the number of degrees clockwise of current heading to turn to.
 	 */
 	public void pointTo(double degrees) {
