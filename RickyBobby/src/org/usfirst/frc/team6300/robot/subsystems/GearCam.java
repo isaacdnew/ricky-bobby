@@ -21,7 +21,7 @@ public class GearCam extends Subsystem {
 	final double fieldOfView = 60;
 	final int fps = 20;
 	final int brightness = 5;
-	final int exposure = 60;
+	final int exposure = 30;
 	final int whiteBalance = 1000;
 	
 	VisionThread visionThread;
