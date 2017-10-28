@@ -48,7 +48,7 @@ public class Robot extends IterativeRobot {
 		
 		commandChooser.addDefault("Deliver Gear", new DeliverGear(this));
 		commandChooser.addObject("Tune PID", new TunePID(drivetrain));
-		commandChooser.addObject("Shoot Low Goals", new LowGoal(this));
+		commandChooser.addObject("Shoot High Goals, then Deliver Gear if Blue", new HighGoal(this));
 		
 		stationChooser.addDefault("Center", "center");
 		stationChooser.addObject("Left", "left");

@@ -23,21 +23,18 @@ public class LowGoal extends Command {
     	isRed = robot.colorChooser.getSelected();
     	robot.shooter.spinUp(1);
     	robot.agitator.spinUp(1);
+    	Timer.delay(5);
+    	robot.shooter.stop();
+    	robot.agitator.stop();
     	if (isRed) {
-    		Timer.delay(5);
-    		robot.shooter.stop();
-        	robot.agitator.stop();
     		robot.drivetrain.goForward(0.3, 1.2);
     	}
     	else {
-    		Timer.delay(10);
-        	robot.shooter.stop();
-        	robot.agitator.stop();
         	robot.drivetrain.enable();
-    		robot.drivetrain.goForward(-0.3, 1.2);
+    		/*robot.drivetrain.goForward(-0.3, 1.2);
     		robot.drivetrain.turnRight(60);
     		robot.drivetrain.goForward(-0.2, 2.8);
-    		robot.drivetrain.goForward(-0.1, 10);
+    		robot.drivetrain.goForward(-0.1, 10);*/
     	}
     }
 
