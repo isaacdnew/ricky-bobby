@@ -85,7 +85,7 @@ public class FindGreenTape implements VisionPipeline {
 		double filterContoursMinArea = 35.0;
 		double filterContoursMinPerimeter = 0.0;
 		double filterContoursMinWidth = 0.0;
-		double filterContoursMaxWidth = 25.0;
+		double filterContoursMaxWidth = 160.0;
 		double filterContoursMinHeight = 0.0;
 		double filterContoursMaxHeight = 1000.0;
 		double[] filterContoursSolidity = {0, 100};

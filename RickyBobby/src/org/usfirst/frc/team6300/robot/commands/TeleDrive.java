@@ -1,5 +1,6 @@
 package org.usfirst.frc.team6300.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team6300.robot.OI;
@@ -9,7 +10,7 @@ import org.usfirst.frc.team6300.robot.subsystems.Drivetrain;
  *
  */
 public class TeleDrive extends Command {
-	private final boolean isPID = true;
+	private final boolean isPID = false;
 	private Drivetrain drivetrain;
 	String lastFront;
 	

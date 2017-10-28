@@ -8,10 +8,12 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  *
  */
 public class HighGoal extends CommandGroup {
-	boolean isRed;
+	boolean isRed = true;
 	
     public HighGoal(Robot robot) {
-    	isRed = robot.colorChooser.getSelected();
+//    	if (robot.colorChooser.getSelected() != null) {
+//    		isRed = robot.colorChooser.getSelected();
+//    	}
         addSequential(new LowGoal(robot));
         if (isRed) {
         	addSequential(new DeliverGear(robot));

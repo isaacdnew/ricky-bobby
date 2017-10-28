@@ -21,7 +21,7 @@ public class GearCam extends Subsystem {
 	final double fieldOfView = 60;
 	final int fps = 20;
 	final int brightness = 5;
-	final int exposure = 30;
+	final int exposure = 60;
 	final int whiteBalance = 1000;
 	
 	VisionThread visionThread;
@@ -54,7 +54,7 @@ public class GearCam extends Subsystem {
 				Rect rect = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
 				centerX = (rect.x + (rect.width / 2));
 				synchronized (turnAngleSync) {
-					turnAngle = ((centerX / imgWidth) - 0.5) * 4;
+					turnAngle = (((centerX / imgWidth) - 0.55) * 4) - 0.375;
 				}
 			}
 			else if (pipeline.filterContoursOutput().size() == 2) {
@@ -64,14 +64,11 @@ public class GearCam extends Subsystem {
 	            double rightX = (rectR.x + (rectR.width / 2));
 	            centerX = (rightX + leftX) / 2;
 	            synchronized(turnAngleSync) {
-	            	turnAngle = ((centerX / imgWidth) - 0.6) * 4;
+	            	turnAngle = (((centerX / imgWidth) - 0.55) * 4) + 1.52;
 	            }
 	        }
-			if (lastTurnAngle != turnAngle) {
-				SmartDashboard.putNumber("Center X", centerX);
-				//SmartDashboard.putNumber("Turn Angle", turnAngle;
-				lastTurnAngle = turnAngle;
-			}
+			SmartDashboard.putNumber("Turn Angle", turnAngle);
+			SmartDashboard.putNumber("Center X", centerX);
 	    });
 	    visionThread.start();
 	}
