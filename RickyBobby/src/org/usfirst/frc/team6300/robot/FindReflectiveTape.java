@@ -99,15 +99,16 @@ public class FindReflectiveTape implements VisionPipeline {
 		double filterContoursMinRatio = 0.2;
 		double filterContoursMaxRatio = 0.9;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
-
+		
+		Rect r = Imgproc.boundingRect(filterContoursOutput.get(0));
 		// Step New_Point0:
-		double newPoint0X = 150.0;
-		double newPoint0Y = 110.0;
+		double newPoint0X = r.x;
+		double newPoint0Y = r.y;
 		newPoint(newPoint0X, newPoint0Y, newPoint0Output);
 
 		// Step New_Point1:
-		double newPoint1X = 10.0;
-		double newPoint1Y = 10.0;
+		double newPoint1X = r.x + r.width;
+		double newPoint1Y = r.y + r.height;
 		newPoint(newPoint1X, newPoint1Y, newPoint1Output);
 
 		// Step CV_rectangle0:

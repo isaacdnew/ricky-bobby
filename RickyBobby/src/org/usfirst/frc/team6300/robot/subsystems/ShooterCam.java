@@ -43,8 +43,7 @@ public class ShooterCam extends Subsystem {
 	public void startProcessing() {
 		CvSource outputStream = CameraServer.getInstance().putVideo("ShooterCam", imgWidth, imgHeight);
 		visionThread = new VisionThread(shooterCam, new ResizeBlurFlip(), pipeline -> {
-			outputStream.putFrame(pipeline.blurOutput());
-			//outputStream.putFrame(pipeline.resizeImageOutput());
+			outputStream.putFrame(pipeline.cvFlipOutput());
 	    });
 	    visionThread.start();
 	}
