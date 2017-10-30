@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
-import org.usfirst.frc.team6300.robot.ResizeThenBlur;
+import org.usfirst.frc.team6300.robot.ResizeBlurFlip;
 
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
@@ -17,7 +17,7 @@ public class ShooterCam extends Subsystem {
 	final int imgHeight = 120;
 	final int fps = 20;
 	final int brightness = 20;
-	final int exposure = 80;
+	final int exposure = 50;
 	final int whiteBalance = 1000;
 	
 	VisionThread visionThread;
@@ -42,7 +42,7 @@ public class ShooterCam extends Subsystem {
 	
 	public void startProcessing() {
 		CvSource outputStream = CameraServer.getInstance().putVideo("ShooterCam", imgWidth, imgHeight);
-		visionThread = new VisionThread(shooterCam, new ResizeThenBlur(), pipeline -> {
+		visionThread = new VisionThread(shooterCam, new ResizeBlurFlip(), pipeline -> {
 			outputStream.putFrame(pipeline.blurOutput());
 			//outputStream.putFrame(pipeline.resizeImageOutput());
 	    });

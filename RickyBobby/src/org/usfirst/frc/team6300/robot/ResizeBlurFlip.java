@@ -25,11 +25,12 @@ import org.opencv.objdetect.*;
 *
 * @author GRIP
 */
-public class ResizeThenBlur implements VisionPipeline {
+public class ResizeBlurFlip implements VisionPipeline {
 
 	//Outputs
 	private Mat resizeImageOutput = new Mat();
 	private Mat blurOutput = new Mat();
+	private Mat cvFlipOutput = new Mat();
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -43,14 +44,19 @@ public class ResizeThenBlur implements VisionPipeline {
 		Mat resizeImageInput = source0;
 		double resizeImageWidth = 160.0;
 		double resizeImageHeight = 120.0;
-		int resizeImageInterpolation = Imgproc.INTER_NEAREST;
+		int resizeImageInterpolation = Imgproc.INTER_AREA;
 		resizeImage(resizeImageInput, resizeImageWidth, resizeImageHeight, resizeImageInterpolation, resizeImageOutput);
 
 		// Step Blur0:
 		Mat blurInput = resizeImageOutput;
-		BlurType blurType = BlurType.get("Box Blur");
-		double blurRadius = 1.801801801801803;
+		BlurType blurType = BlurType.get("Median Filter");
+		double blurRadius = 1.8018018018018056;
 		blur(blurInput, blurType, blurRadius, blurOutput);
+
+		// Step CV_flip0:
+		Mat cvFlipSrc = blurOutput;
+		FlipCode cvFlipFlipcode = FlipCode.BOTH_AXES;
+		cvFlip(cvFlipSrc, cvFlipFlipcode, cvFlipOutput);
 
 	}
 
@@ -68,6 +74,14 @@ public class ResizeThenBlur implements VisionPipeline {
 	 */
 	public Mat blurOutput() {
 		return blurOutput;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a CV_flip.
+	 * @return Mat output from CV_flip.
+	 */
+	public Mat cvFlipOutput() {
+		return cvFlipOutput;
 	}
 
 
@@ -147,6 +161,32 @@ public class ResizeThenBlur implements VisionPipeline {
 				Imgproc.bilateralFilter(input, output, -1, radius, radius);
 				break;
 		}
+	}
+
+	/**
+	 * Code used for CV_flip. 
+	 * Per OpenCV spec 0 -> flip on X axis.
+	 * >0 -> flip on Y axis.
+	 * <0 -> flip on both axes.
+	 */
+	public enum FlipCode {
+		X_AXIS(0),
+		Y_AXIS(1),
+		BOTH_AXES(-1);
+		public final int value;
+		FlipCode(int value) {
+			this.value = value;
+		}
+	}	
+	
+	/**
+	 * Flips an image along X, Y or both axes.
+	 * @param src Image to flip.
+	 * @param flipcode FlipCode of which direction to flip.
+	 * @param dst flipped version of the Image.
+	 */
+	private void cvFlip(Mat src, FlipCode flipcode, Mat dst) {
+		Core.flip(src, dst, flipcode.value);
 	}
 
 

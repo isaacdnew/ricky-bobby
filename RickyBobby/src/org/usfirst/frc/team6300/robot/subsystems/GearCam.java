@@ -2,7 +2,7 @@ package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
-import org.usfirst.frc.team6300.robot.FindGreenTape;
+import org.usfirst.frc.team6300.robot.FindReflectiveTape;
 
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
@@ -45,11 +45,8 @@ public class GearCam extends Subsystem {
 	
 	public void startProcessing() {
 		CvSource outputStream = CameraServer.getInstance().putVideo("GearCam", imgWidth, imgHeight);
-		CvSource maskStream = CameraServer.getInstance().putVideo("GearCam Mask", imgWidth, imgHeight);
-		visionThread = new VisionThread(gearCam, new FindGreenTape(), pipeline -> {
-			maskStream.putFrame(pipeline.maskOutput());
-			//outputStream.putFrame(pipeline.blurOutput());
-			//outputStream.putFrame(pipeline.resizeImageOutput());
+		visionThread = new VisionThread(gearCam, new FindReflectiveTape(), pipeline -> {
+			outputStream.putFrame(pipeline.cvRectangleOutput());
 			if (pipeline.filterContoursOutput().size() == 1) {
 				Rect rect = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
 				centerX = (rect.x + (rect.width / 2));
