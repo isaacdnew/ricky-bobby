@@ -40,7 +40,7 @@ public class Drivetrain extends PIDSubsystem {
 	static final double p = 0.04;
 	static final double i = 0.0001;
 	static final double d = 0.16;
-	static final double feedForward = 0.03; //TODO try 0.02 - 0.06 (try bringing it up to the level of p).
+	static final double feedForward = 0.06; //TODO try 0.02 - 0.06 (try bringing it up to the level of p).
 	static final double pidPeriod = 0.005;
 	
 	public Drivetrain() {
