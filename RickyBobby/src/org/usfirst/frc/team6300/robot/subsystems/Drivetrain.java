@@ -37,7 +37,7 @@ public class Drivetrain extends PIDSubsystem {
 	
 	boolean gearIsFront = true;
 	
-	static final double p = 0.05;
+	static final double p = 0.04;
 	static final double i = 0.0001;
 	static final double d = 0.16;
 	static final double feedForward = 0.03; //TODO try 0.02 - 0.06 (try bringing it up to the level of p).

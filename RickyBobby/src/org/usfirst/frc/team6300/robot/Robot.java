@@ -61,7 +61,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Alliance Station Chooser", stationChooser);
 		SmartDashboard.putData("Alliance Color Chooser", colorChooser);
 		gearCam.startProcessing();
-		//shooterCam.startProcessing();
+		shooterCam.startProcessing();
 		
 		drivetrain.calibrateGyro();
 	}

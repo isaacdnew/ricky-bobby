@@ -43,12 +43,12 @@ public class ResizeThenBlur implements VisionPipeline {
 		Mat resizeImageInput = source0;
 		double resizeImageWidth = 160.0;
 		double resizeImageHeight = 120.0;
-		int resizeImageInterpolation = Imgproc.INTER_CUBIC;
+		int resizeImageInterpolation = Imgproc.INTER_NEAREST;
 		resizeImage(resizeImageInput, resizeImageWidth, resizeImageHeight, resizeImageInterpolation, resizeImageOutput);
 
 		// Step Blur0:
 		Mat blurInput = resizeImageOutput;
-		BlurType blurType = BlurType.get("Median Filter");
+		BlurType blurType = BlurType.get("Box Blur");
 		double blurRadius = 1.801801801801803;
 		blur(blurInput, blurType, blurRadius, blurOutput);
 

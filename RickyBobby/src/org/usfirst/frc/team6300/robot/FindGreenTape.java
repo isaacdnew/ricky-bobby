@@ -49,7 +49,7 @@ public class FindGreenTape implements VisionPipeline {
 		Mat resizeImageInput = source0;
 		double resizeImageWidth = 160.0;
 		double resizeImageHeight = 120.0;
-		int resizeImageInterpolation = Imgproc.INTER_CUBIC;
+		int resizeImageInterpolation = Imgproc.INTER_NEAREST;
 		resizeImage(resizeImageInput, resizeImageWidth, resizeImageHeight, resizeImageInterpolation, resizeImageOutput);
 
 		// Step CV_flip0:

@@ -16,8 +16,8 @@ public class ShooterCam extends Subsystem {
 	final int imgWidth = 160;
 	final int imgHeight = 120;
 	final int fps = 20;
-	final int brightness = 5;
-	final int exposure = 30;
+	final int brightness = 20;
+	final int exposure = 80;
 	final int whiteBalance = 1000;
 	
 	VisionThread visionThread;
@@ -28,7 +28,7 @@ public class ShooterCam extends Subsystem {
 	
 	
 	public ShooterCam(int port) {
-		shooterCam = new UsbCamera("GearCam", port);
+		shooterCam = new UsbCamera("ShooterCam", port);
 		shooterCam.setResolution(imgWidth, imgHeight);
 		shooterCam.setFPS(fps);
 		shooterCam.setBrightness(brightness);

@@ -21,7 +21,7 @@ public class GearCam extends Subsystem {
 	final double fieldOfView = 60;
 	final int fps = 20;
 	final int brightness = 5;
-	final int exposure = 30;
+	final int exposure = 40;
 	final int whiteBalance = 1000;
 	
 	VisionThread visionThread;
@@ -48,7 +48,7 @@ public class GearCam extends Subsystem {
 		CvSource maskStream = CameraServer.getInstance().putVideo("GearCam Mask", imgWidth, imgHeight);
 		visionThread = new VisionThread(gearCam, new FindGreenTape(), pipeline -> {
 			maskStream.putFrame(pipeline.maskOutput());
-			outputStream.putFrame(pipeline.blurOutput());
+			//outputStream.putFrame(pipeline.blurOutput());
 			//outputStream.putFrame(pipeline.resizeImageOutput());
 			if (pipeline.filterContoursOutput().size() == 1) {
 				Rect rect = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));

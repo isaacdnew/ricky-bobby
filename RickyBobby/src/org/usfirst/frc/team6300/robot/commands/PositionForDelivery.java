@@ -26,11 +26,11 @@ public class PositionForDelivery extends Command {
 	private void left(boolean isRed) {
 		if (isRed) {
 			robot.drivetrain.enable();
-			robot.drivetrain.goForward(0.3, 1.27);
+			robot.drivetrain.goForward(0.3, 1.3);
 		}
 		else {
 			robot.drivetrain.enable();
-			robot.drivetrain.goForward(0.3, 1.2);
+			robot.drivetrain.goForward(0.3, 1.3);
 		}
 		robot.drivetrain.stop();
 		Timer.delay(0.5);
