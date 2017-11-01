@@ -81,7 +81,7 @@ public class GearCam extends Subsystem {
 	public void initDefaultCommand() {
 	}
 }
-// Logic for the vision pipeline:
+// Logic for the vision pipeline (it's here because it could be overwritten when new code is generated):
 
 //if (filterContoursOutput().size() > 1) {
 //	Rect r0 = Imgproc.boundingRect(filterContoursOutput.get(0));
