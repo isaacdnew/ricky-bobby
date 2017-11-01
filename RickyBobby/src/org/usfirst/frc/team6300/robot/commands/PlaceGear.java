@@ -40,8 +40,7 @@ public class PlaceGear extends Command {
 			lastTurnAngle = gearCam.getTurnAngle();
 			drivetrain.pointTo(gearCam.getTurnAngle());
 			if (isAuto) {
-				slideSpeed = gearCam.getTurnAngle() / 4;
-				drivetrain.setDriveSpeeds(-0.2, slideSpeed);
+				drivetrain.setDriveSpeeds(-0.2, 0);
 			}
 		}
 		

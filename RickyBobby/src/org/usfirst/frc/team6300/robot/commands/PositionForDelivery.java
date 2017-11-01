@@ -34,13 +34,14 @@ public class PositionForDelivery extends Command {
 	
 	@Override
 	protected void end() {
-		robot.drivetrain.getPIDController().setOutputRange(-0.4, 0.4);
+		robot.drivetrain.getPIDController().setOutputRange(-0.3, 0.3);
 		station = robot.stationChooser.getSelected();
 		System.out.println("Positioning from " + station + "...");
 		switch (station) {
 		case "center": {
 			//System.out.println("center");
-			robot.drivetrain.goForward(0.3, 1);
+			robot.drivetrain.enable();
+			robot.drivetrain.goForward(0.3, 0.5);
 			robot.drivetrain.goForward(0.2, 15);
 			break;
 		}
@@ -75,6 +76,7 @@ public class PositionForDelivery extends Command {
 		robot.drivetrain.stop();
 		Timer.delay(0.5);
 		robot.drivetrain.turnRight(60);
+		Timer.delay(2);
 	}
 	
 	private void right(boolean isRed) {
@@ -89,5 +91,6 @@ public class PositionForDelivery extends Command {
 		robot.drivetrain.stop();
 		Timer.delay(0.5);
 		robot.drivetrain.turnLeft(60);
+		Timer.delay(2);
 	}
 }

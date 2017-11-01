@@ -62,9 +62,9 @@ public class FindReflectiveTape implements VisionPipeline {
 
 		// Step HSL_Threshold0:
 		Mat hslThresholdInput = blurOutput;
-		double[] hslThresholdHue = {80.93525179856115, 89.8471986417657};
-		double[] hslThresholdSaturation = {169.69424460431654, 255.0};
-		double[] hslThresholdLuminance = {119.24460431654676, 255.0};
+		double[] hslThresholdHue = {80.0, 90.0};
+		double[] hslThresholdSaturation = {50.0, 255.0};
+		double[] hslThresholdLuminance = {100.0, 255.0};
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, hslThresholdOutput);
 
 		// Step CV_erode0:
@@ -96,26 +96,40 @@ public class FindReflectiveTape implements VisionPipeline {
 		double[] filterContoursSolidity = {84.53237410071944, 100};
 		double filterContoursMaxVertices = 100.0;
 		double filterContoursMinVertices = 0.0;
-		double filterContoursMinRatio = 0.2;
-		double filterContoursMaxRatio = 0.9;
+		double filterContoursMinRatio = 0.0;
+		double filterContoursMaxRatio = 1;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 		
-		Rect r = Imgproc.boundingRect(filterContoursOutput.get(0));
-		// Step New_Point0:
-		double newPoint0X = r.x;
-		double newPoint0Y = r.y;
-		newPoint(newPoint0X, newPoint0Y, newPoint0Output);
-
-		// Step New_Point1:
-		double newPoint1X = r.x + r.width;
-		double newPoint1Y = r.y + r.height;
-		newPoint(newPoint1X, newPoint1Y, newPoint1Output);
-
+		if (filterContoursOutput().size() > 1) {
+			Rect r0 = Imgproc.boundingRect(filterContoursOutput.get(0));
+			Rect r1 = Imgproc.boundingRect(filterContoursOutput.get(1));
+			
+			double newPoint0X = r0.x;
+			double newPoint0Y = r0.y;
+			newPoint(newPoint0X, newPoint0Y, newPoint0Output);
+			
+			double newPoint1X = r1.x + r1.width;
+			double newPoint1Y = r1.y + r1.height;
+			newPoint(newPoint1X, newPoint1Y, newPoint1Output);
+		}
+		else {
+			// Step New_Point0:
+			
+			double newPoint0X = 10;
+			double newPoint0Y = 10;
+			newPoint(newPoint0X, newPoint0Y, newPoint0Output);
+			
+			// Step New_Point1:
+			double newPoint1X = 150;
+			double newPoint1Y = 110;
+			newPoint(newPoint1X, newPoint1Y, newPoint1Output);
+		}
+		
 		// Step CV_rectangle0:
 		Mat cvRectangleSrc = blurOutput;
 		Point cvRectanglePt1 = newPoint0Output;
 		Point cvRectanglePt2 = newPoint1Output;
-		Scalar cvRectangleColor = new Scalar(0.0, 0.0, 0.0, 0.0);
+		Scalar cvRectangleColor = new Scalar(0.0, 255.0, 0.0, 0.0);
 		double cvRectangleThickness = 1.0;
 		int cvRectangleLinetype = Core.LINE_AA;
 		double cvRectangleShift = 0.0;
